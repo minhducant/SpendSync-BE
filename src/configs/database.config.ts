@@ -9,17 +9,17 @@ export interface DatabaseConfig {
   options: MongooseModuleOptions;
 }
 
-export const mongodb = {
-  uri: getConfig().get<string>('mongodb.uri'),
-  options: {
-    directConnection: true,
-    connectionFactory: (connection: any) => {
-      connection.plugin(addedPaginate);
-      connection.plugin(mongooseAggregatePaginateV2);
-      return connection;
-    },
-  },
-};
+// export const mongodb = {
+//   uri: getConfig().get<string>('mongodb.uri'),
+//   options: {
+//     directConnection: true,
+//     connectionFactory: (connection: any) => {
+//       connection.plugin(addedPaginate);
+//       connection.plugin(mongooseAggregatePaginateV2);
+//       return connection;
+//     },
+//   },
+// };
 
 export const Options: SchemaOptions = {
   timestamps: true,

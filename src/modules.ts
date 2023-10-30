@@ -6,7 +6,7 @@ import { ScheduleModule } from '@nestjs/schedule';
 import { CacheModule } from '@nestjs/cache-manager';
 import * as redisStore from 'cache-manager-redis-store';
 
-import { mongodb } from 'src/configs/database.config';
+// import { mongodb } from 'src/configs/database.config';
 import { redisConfig } from 'src/configs/redis.config';
 import { AuthModule } from 'src/modules/auth/auth.module';
 import { ClientModule } from 'src/modules/client/client.module';
