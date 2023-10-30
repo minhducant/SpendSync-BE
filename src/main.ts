@@ -19,6 +19,10 @@ const prefix = config.get<string>('app.prefix');
 const appEnv = config.get<string>('app.node_env');
 const dnsSentry = config.get<string>('sentry_dns');
 
+console.log(prefix)
+console.log(appEnv)
+console.log(dnsSentry)
+
 async function bootstrap(): Promise<void> {
   const app = await NestFactory.create<NestExpressApplication>(AppModules, {
     cors: true,
