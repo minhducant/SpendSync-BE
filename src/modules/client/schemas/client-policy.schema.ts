@@ -42,4 +42,5 @@ export class ClientPolicy {
 }
 
 export type ClientPolicyDocument = ClientPolicy & Document;
+
 export const ClientPolicySchema = SchemaFactory.createForClass(ClientPolicy);

@@ -5,25 +5,6 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { ClientStatus } from 'src/shares/enums/client.enum';
 
 export const CLIENT_MODEL = 'clients';
-
-@Schema({ _id: false })
-export class ClientProduct {
-  @Prop({
-    required: false,
-    type: MongooseSchema.Types.ObjectId,
-    index: true,
-  })
-  product_id: string;
-
-  @Prop({ required: false, type: MongooseSchema.Types.Date })
-  end_time: MongooseSchema.Types.Date;
-
-  @Prop({ required: false, type: MongooseSchema.Types.Date })
-  start_time: MongooseSchema.Types.Date;
-}
-
-export const ClientProductSchema = SchemaFactory.createForClass(ClientProduct);
-
 @Schema({ timestamps: true, collection: CLIENT_MODEL })
 export class Client {
   @Prop({ type: String })
@@ -74,4 +55,5 @@ export class Client {
 }
 
 export type ClientDocument = Client & Document;
+
 export const ClientSchema = SchemaFactory.createForClass(Client);
