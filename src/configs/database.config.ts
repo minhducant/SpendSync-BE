@@ -1,25 +1,26 @@
 import { Types } from 'mongoose';
 import { getConfig } from 'src/configs/index';
-import addedPaginate from 'mongoose-aggregate-paginate-v2';
 import { MongooseModuleOptions, SchemaOptions } from '@nestjs/mongoose';
 import mongooseAggregatePaginateV2 from 'src/shares/libs/mongoose-aggregate-paginate-v2';
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const addedPaginate = require('mongoose-aggregate-paginate-v2');
 
 export interface DatabaseConfig {
   uri: string;
   options: MongooseModuleOptions;
 }
 
-// export const mongodb = {
-//   uri: getConfig().get<string>('mongodb.uri'),
-//   options: {
-//     directConnection: true,
-//     connectionFactory: (connection: any) => {
-//       connection.plugin(addedPaginate);
-//       connection.plugin(mongooseAggregatePaginateV2);
-//       return connection;
-//     },
-//   },
-// };
+export const mongodb = {
+  uri: getConfig().get<string>('mongodb.uri'),
+  options: {
+    directConnection: true,
+    connectionFactory: (connection: any) => {
+      connection.plugin(addedPaginate);
+      connection.plugin(mongooseAggregatePaginateV2);
+      return connection;
+    },
+  },
+};
 
 export const Options: SchemaOptions = {
   timestamps: true,

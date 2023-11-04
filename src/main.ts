@@ -37,21 +37,26 @@ async function bootstrap(): Promise<void> {
   // app.useWebSocketAdapter(new RedisIoAdapter(app));
 
   const appName = config.get<string>('app.name');
-  const options = new DocumentBuilder()
-    .addBearerAuth()
+  
+    const options = new DocumentBuilder()
     .setTitle(appName)
     .setDescription(appName)
-    .setVersion(prefix)
+    .setVersion('1.0')
+    .addTag('app')
     .build();
+    
   const document = SwaggerModule.createDocument(app, options);
-  SwaggerModule.setup(`${prefix}/docs`, app, document, {
-    customSiteTitle: appName,
-    swaggerOptions: {
-      docExpansion: 'list',
-      filter: true,
-      displayRequestDuration: true,
-    },
-  });
+   
+  // const document = SwaggerModule.createDocument(app, options);
+
+  // SwaggerModule.setup(`${prefix}/docs`, app, document, {
+  //   customSiteTitle: appName,
+  //   swaggerOptions: {
+  //     docExpansion: 'list',
+  //     filter: true,
+  //     displayRequestDuration: true,
+  //   },
+  // });
 
   app.use(helmet());
   app.useWebSocketAdapter(new IoAdapter(app));

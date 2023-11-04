@@ -1,6 +1,5 @@
 import { ApiTags } from '@nestjs/swagger';
 import { Controller } from '@nestjs/common';
-
 import { ClientService } from './client.service';
 
 @ApiTags('Client')
