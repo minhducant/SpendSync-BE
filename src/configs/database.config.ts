@@ -1,9 +1,9 @@
 import { Types } from 'mongoose';
 import { getConfig } from 'src/configs/index';
-import addedPaginate from 'mongoose-aggregate-paginate-v2';
 import { MongooseModuleOptions, SchemaOptions } from '@nestjs/mongoose';
 import mongooseAggregatePaginateV2 from 'src/shares/libs/mongoose-aggregate-paginate-v2';
 
+const addedPaginate = require('mongoose-aggregate-paginate-v2');
 export interface DatabaseConfig {
   uri: string;
   options: MongooseModuleOptions;
