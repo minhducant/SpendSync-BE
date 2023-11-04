@@ -6,6 +6,8 @@ import * as redisStore from 'cache-manager-redis-store';
 
 import { redisConfig } from 'src/configs/redis.config';
 import { ClientModule } from 'src/modules/client/client.module';
+import { AuthController } from './auth.controller';
+import { AuthService } from './auth.service';
 
 @Module({
   imports: [
@@ -21,5 +23,7 @@ import { ClientModule } from 'src/modules/client/client.module';
       maxRedirects: 5,
     }),
   ],
+  controllers: [AuthController],
+  providers: [AuthService]
 })
 export class AuthModule {}

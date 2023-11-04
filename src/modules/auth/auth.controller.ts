@@ -27,6 +27,7 @@ export class AuthController {
   @ClientAuth()
   @ApiOperation({ summary: '[ Client ] Get get access token info' })
   async currentClient(@UserID() clientId: string): Promise<User> {
+    console.log("client/current")
     return this.clientService.findById(clientId);
   }
 

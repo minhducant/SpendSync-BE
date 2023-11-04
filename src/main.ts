@@ -46,17 +46,15 @@ async function bootstrap(): Promise<void> {
     .build();
     
   const document = SwaggerModule.createDocument(app, options);
-   
-  // const document = SwaggerModule.createDocument(app, options);
 
-  // SwaggerModule.setup(`${prefix}/docs`, app, document, {
-  //   customSiteTitle: appName,
-  //   swaggerOptions: {
-  //     docExpansion: 'list',
-  //     filter: true,
-  //     displayRequestDuration: true,
-  //   },
-  // });
+  SwaggerModule.setup(`${prefix}/docs`, app, document, {
+    customSiteTitle: appName,
+    swaggerOptions: {
+      docExpansion: 'list',
+      filter: true,
+      displayRequestDuration: true,
+    },
+  });
 
   app.use(helmet());
   app.useWebSocketAdapter(new IoAdapter(app));
