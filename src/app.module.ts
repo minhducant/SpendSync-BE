@@ -4,9 +4,9 @@ import Modules from 'src/modules';
 import { LoggerMiddleware } from 'src/shares/middlewares/logger.middleware';
 
 @Module({
-  imports: [...Modules],
   controllers: [],
   providers: [Logger],
+  imports: [...Modules],
 })
 export class AppModules {
   configure(consumer: MiddlewareConsumer): void {

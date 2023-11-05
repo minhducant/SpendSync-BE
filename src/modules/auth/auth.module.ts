@@ -4,6 +4,8 @@ import { HttpModule } from '@nestjs/axios';
 import { CacheModule } from '@nestjs/cache-manager';
 import * as redisStore from 'cache-manager-redis-store';
 
+import { AuthService } from './auth.service';
+import { AuthController } from './auth.controller';
 import { redisConfig } from 'src/configs/redis.config';
 import { ClientModule } from 'src/modules/client/client.module';
 
@@ -21,5 +23,7 @@ import { ClientModule } from 'src/modules/client/client.module';
       maxRedirects: 5,
     }),
   ],
+  providers: [AuthService],
+  controllers: [AuthController],
 })
 export class AuthModule {}
