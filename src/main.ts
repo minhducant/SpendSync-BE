@@ -40,20 +40,20 @@ async function bootstrap(): Promise<void> {
   const options = new DocumentBuilder()
     .addBearerAuth()
     .setTitle(appName)
-    .setDescription(appName)
-    .setVersion(prefix)
+    .setDescription("")
+    .setVersion('0.0.1')
     .build();
   const document = SwaggerModule.createDocument(app, options);
   SwaggerModule.setup(`${prefix}/docs`, app, document, {
     customSiteTitle: appName,
     swaggerOptions: {
-      filter: true,
+      deepLinking: true,
       docExpansion: 'list',
       displayRequestDuration: true,
     },
   });
   await app.listen(appPort);
   const logger = app.get(Logger);
-  logger.log(`Application is running on: ${await app.getUrl()}`);
+  logger.log(`Application is running on: ${await app.getUrl()}/${prefix}/docs/#/`);
 }
 bootstrap();

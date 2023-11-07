@@ -15,12 +15,12 @@ import { CACHE_MANAGER } from '@nestjs/cache-manager';
 
 import {
   JWT_CONSTANTS,
-  CLIENT_AUTH_CACHE_PREFIX,
+  USER_AUTH_CACHE_PREFIX,
 } from 'src/modules/auth/auth.constants';
 import { httpErrors } from 'src/shares/exceptions';
+import { UserService } from '../user/user.service';
+import { User } from '../user/schemas/user.schema';
 import { LoginGoogleDto } from './dto/login-google.dto';
-import { ClientService } from '../client/client.service';
-import { Client } from '../client/schemas/client.schema';
 import { LoginFacebookDto } from './dto/login-facebook.dto';
 import { UserGoogleInfoDto } from './dto/user-google-info.dto';
 import { UserFacebookInfoDto } from './dto/user-facebook-info.dto';
@@ -38,18 +38,18 @@ export class AuthService {
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
     private jwtService: JwtService,
     private httpService: HttpService,
-    private clientService: ClientService,
+    private userService: UserService,
   ) {}
 
-  async ClientGetAccessToken(
+  async UserGetAccessToken(
     payload: PayloadRefreshTokenDto,
   ): Promise<ResponseRefreshTokenDto> {
     const { userId, refreshToken } = payload;
-    const [client, oldRefreshToken] = await Promise.all([
-      this.clientService.findById(userId.toString()),
-      this.cacheManager.get<string>(`${CLIENT_AUTH_CACHE_PREFIX}${userId}`),
+    const [user, oldRefreshToken] = await Promise.all([
+      this.userService.findById(userId.toString()),
+      this.cacheManager.get<string>(`${USER_AUTH_CACHE_PREFIX}${userId}`),
     ]);
-    if (!client) throw new ForbiddenException();
+    if (!user) throw new ForbiddenException();
     if (!oldRefreshToken)
       throw new HttpException(
         httpErrors.REFRESH_TOKEN_EXPIRED,
@@ -57,14 +57,14 @@ export class AuthService {
       );
     if (refreshToken === oldRefreshToken) {
       const [newAccessToken, newRefreshToken] = await Promise.all([
-        this.generateClientAccessToken(client['_id']),
-        this.generateClientRefreshToken(client['_id']),
+        this.generateUserAccessToken(user['_id']),
+        this.generateUserRefreshToken(user['_id']),
       ]);
       return {
         accessToken: newAccessToken,
         refreshToken: newRefreshToken,
         iat: Date.now(),
-        exp: Date.now() + JWT_CONSTANTS.clientAccessTokenExpiry,
+        exp: Date.now() + JWT_CONSTANTS.userAccessTokenExpiry,
       };
     } else
       throw new HttpException(
@@ -73,34 +73,34 @@ export class AuthService {
       );
   }
 
-  async generateClientAccessToken(client: Client): Promise<string> {
+  async generateUserAccessToken(user: User): Promise<string> {
     return this.jwtService.signAsync(
       {
-        userId: client['_id'],
+        userId: user['_id'],
         date: Date.now(),
       },
       {
-        secret: JWT_CONSTANTS.clientAccessTokenSecret,
-        expiresIn: JWT_CONSTANTS.clientAccessTokenExpiry,
+        secret: JWT_CONSTANTS.userAccessTokenSecret,
+        expiresIn: JWT_CONSTANTS.userAccessTokenExpiry,
       },
     );
   }
 
-  async generateClientRefreshToken(user: Client): Promise<string> {
+  async generateUserRefreshToken(user: User): Promise<string> {
     const refreshToken = await this.jwtService.signAsync(
       {
         userId: user['_id'],
         date: Date.now(),
       },
       {
-        secret: JWT_CONSTANTS.clientRefreshTokenSecret,
-        expiresIn: JWT_CONSTANTS.clientRefreshTokenExpiry,
+        secret: JWT_CONSTANTS.userAccessTokenSecret,
+        expiresIn: JWT_CONSTANTS.userAccessTokenExpiry,
       },
     );
     await this.cacheManager.set(
-      `${CLIENT_AUTH_CACHE_PREFIX}${user['_id']}`,
+      `${USER_AUTH_CACHE_PREFIX}${user['_id']}`,
       refreshToken,
-      JWT_CONSTANTS.clientRefreshTokenExpiry,
+      JWT_CONSTANTS.userAccessTokenExpiry,
     );
     return refreshToken;
   }
@@ -135,16 +135,16 @@ export class AuthService {
         httpErrors.FACEBOOK_TOKEN_INVALID_OR_EXPIRES,
       );
     }
-    const client = await this.clientService.findOrCreateFacebookUser(userData);
+    const user = await this.userService.findOrCreateFacebookUser(userData);
     const [accessToken_, refreshToken] = await Promise.all([
-      this.generateClientAccessToken(client['_id']),
-      this.generateClientRefreshToken(client['_id']),
+      this.generateUserAccessToken(user['_id']),
+      this.generateUserRefreshToken(user['_id']),
     ]);
     return {
       accessToken: accessToken_,
       refreshToken,
       iat: Date.now(),
-      exp: Date.now() + JWT_CONSTANTS.clientAccessTokenExpiry,
+      exp: Date.now() + JWT_CONSTANTS.userAccessTokenExpiry,
     };
   }
 
@@ -168,16 +168,16 @@ export class AuthService {
     if (!userData) {
       throw new BadRequestException(httpErrors.GOOGLE_TOKEN_INVALID_OR_EXPIRES);
     }
-    const client = await this.clientService.findOrCreateGoogleUser(userData);
+    const user = await this.userService.findOrCreateGoogleUser(userData);
     const [accessToken_, refreshToken] = await Promise.all([
-      this.generateClientAccessToken(client['_id']),
-      this.generateClientRefreshToken(client['_id']),
+      this.generateUserAccessToken(user['_id']),
+      this.generateUserRefreshToken(user['_id']),
     ]);
     return {
       accessToken: accessToken_,
       refreshToken,
       iat: Date.now(),
-      exp: Date.now() + JWT_CONSTANTS.clientAccessTokenExpiry,
+      exp: Date.now() + JWT_CONSTANTS.userAccessTokenExpiry,
     };
   }
 }

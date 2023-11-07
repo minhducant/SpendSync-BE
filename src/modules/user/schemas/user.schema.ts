@@ -2,11 +2,12 @@ import { Exclude } from 'class-transformer';
 import { Document, Schema as MongooseSchema } from 'mongoose';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 
-import { ClientStatus } from 'src/shares/enums/client.enum';
+import { UserStatus } from 'src/shares/enums/user.enum';
 
-export const CLIENT_MODEL = 'clients';
-@Schema({ timestamps: true, collection: CLIENT_MODEL })
-export class Client {
+export const USER_MODEL = 'user';
+
+@Schema({ timestamps: true, collection: USER_MODEL })
+export class User {
   @Prop({ type: String })
   name: string;
 
@@ -24,10 +25,10 @@ export class Client {
   full_name: string;
 
   @Prop({ type: String })
-  japanese_name: string;
-
-  @Prop({ type: String })
   phone: string;
+
+  @Prop({ type: Date })
+  birthday: Date;
 
   @Prop({ type: String })
   email: string;
@@ -41,8 +42,8 @@ export class Client {
   @Prop({ type: Boolean, default: false })
   is_banned: boolean;
 
-  @Prop({ type: String, enum: ClientStatus, default: ClientStatus.INACTIVE })
-  status: ClientStatus;
+  @Prop({ type: String, enum: UserStatus, default: UserStatus.INACTIVE })
+  status: UserStatus;
 
   @Prop({ type: String })
   facebook_id: string;
@@ -52,8 +53,11 @@ export class Client {
 
   @Prop({ type: Date })
   last_login_at: Date;
+
+  @Prop({ required: false, type: String })
+  image_url: string;
 }
 
-export type ClientDocument = Client & Document;
+export type UserDocument = User & Document;
 
-export const ClientSchema = SchemaFactory.createForClass(Client);
+export const UserSchema = SchemaFactory.createForClass(User);

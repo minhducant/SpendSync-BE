@@ -9,8 +9,10 @@ import * as redisStore from 'cache-manager-redis-store';
 
 import { mongodb } from 'src/configs/database.config';
 import { redisConfig } from 'src/configs/redis.config';
+//Customer Module
+import { NoteModule } from './modules/note/note.module';
+import { UserModule } from 'src/modules/user/user.module';
 import { AuthModule } from 'src/modules/auth/auth.module';
-import { ClientModule } from 'src/modules/client/client.module';
 import { FirebaseModule } from 'src/modules/firebase/firebase.module';
 
 const Modules: any = [
@@ -32,7 +34,8 @@ const Modules: any = [
   }),
   //Customer Module
   AuthModule,
-  ClientModule,
+  UserModule,
+  NoteModule,
   FirebaseModule,
 ];
 export default Modules;

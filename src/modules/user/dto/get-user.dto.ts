@@ -1,7 +1,7 @@
 import { IsEmail, IsMongoId } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
-export class GetClientDto {
+export class GetUserDto {
   @ApiProperty({
     description: 'User ID',
     example: '6440d750376fd29eb0a33c41',

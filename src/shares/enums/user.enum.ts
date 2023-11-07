@@ -1,9 +1,9 @@
-export enum ClientStatus {
+export enum UserStatus {
   ACTIVE = 'ACTIVE',
   INACTIVE = 'INACTIVE',
 }
 
-export enum ClientRole {
+export enum UserRole {
   admin = 0,
   user = 1,
 }

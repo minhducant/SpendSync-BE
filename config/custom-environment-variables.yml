@@ -4,6 +4,7 @@ app:
   port: APP_PORT
   prefix: APP_PREFIX
   url: APP_URL
+  version: VERSION
   client_jwt_access_token_secret: CLIENT_JWT_ACCESS_TOKEN_SECRET
   client_jwt_access_token_expiration_time: CLIENT_JWT_ACCESS_TOKEN_EXPIRATION_TIME
   client_jwt_refresh_token_secret: CLIENT_JWT_REFRESH_TOKEN_SECRET

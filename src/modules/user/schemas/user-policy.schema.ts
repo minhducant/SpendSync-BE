@@ -1,9 +1,9 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
-export const CLIENT_POLICY_MODEL = 'client_policy';
+export const USER_POLICY_MODEL = 'user_policy';
 
-@Schema({ timestamps: true, collection: CLIENT_POLICY_MODEL })
-export class ClientPolicy {
+@Schema({ timestamps: true, collection: USER_POLICY_MODEL })
+export class UserPolicy {
   @Prop({ type: String })
   name: string;
 
@@ -41,6 +41,6 @@ export class ClientPolicy {
   top_up_upgrade_rewards: string;
 }
 
-export type ClientPolicyDocument = ClientPolicy & Document;
+export type UserPolicyDocument = UserPolicy & Document;
 
-export const ClientPolicySchema = SchemaFactory.createForClass(ClientPolicy);
+export const UserPolicySchema = SchemaFactory.createForClass(UserPolicy);

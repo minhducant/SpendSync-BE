@@ -7,11 +7,11 @@ import * as redisStore from 'cache-manager-redis-store';
 import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
 import { redisConfig } from 'src/configs/redis.config';
-import { ClientModule } from 'src/modules/client/client.module';
+import { UserModule } from 'src/modules/user/user.module';
 
 @Module({
   imports: [
-    ClientModule,
+    UserModule,
     JwtModule.register({}),
     CacheModule.register({
       store: redisStore,
