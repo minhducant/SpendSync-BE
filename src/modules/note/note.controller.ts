@@ -19,8 +19,11 @@ export class NoteController {
   @UserAuth()
   @Get()
   @ApiOperation({ summary: '[Note] Get notes', description: 'Display notes' })
-  async find(@Query() query: GetNoteDto): Promise<ResPagingDto<Note[]>> {
-    return this.noteService.find(query);
+  async find(
+    @UserID() userId: string,
+    @Query() query: GetNoteDto,
+  ): Promise<ResPagingDto<Note[]>> {
+    return this.noteService.find(query, userId);
   }
 
   @Get(':id')

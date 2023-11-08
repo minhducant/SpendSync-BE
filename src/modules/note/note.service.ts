@@ -11,9 +11,10 @@ import { ResPagingDto } from 'src/shares/dtos/pagination.dto';
 export class NoteService {
   constructor(@InjectModel(Note.name) private noteModel: Model<NoteDocument>) {}
 
-  async find(getShippingDto: GetNoteDto): Promise<ResPagingDto<Note[]>> {
-    const { sort, page, limit, title } = getShippingDto;
+  async find(getNoteDto: GetNoteDto, user_id: string): Promise<ResPagingDto<Note[]>> {
+    const { sort, page, limit, title } = getNoteDto;
     const query: any = {};
+    query.user_id = user_id;
     if (title) {
       query.title = { $regex: title, $options: 'i' };
     }
@@ -37,7 +38,7 @@ export class NoteService {
   }
 
   async create(payload: CreateNoteDto, create_by: string): Promise<void> {
-    console.log({ ...payload, userId: create_by });
-    await this.noteModel.create({ ...payload, userId: create_by });
+    console.log({ ...payload, user_id: create_by })
+    await this.noteModel.create({ ...payload, user_id: create_by });
   }
 }
