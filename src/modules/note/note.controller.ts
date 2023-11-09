@@ -6,10 +6,10 @@ import { NoteService } from './note.service';
 import { GetNoteDto } from './dto/get-note.dto';
 import { IdDto } from 'src/shares/dtos/param.dto';
 import { CreateNoteDto } from './dto/create-note.dto';
-import { ChangeMemberDto } from './dto/update-note.dto';
 import { ResPagingDto } from 'src/shares/dtos/pagination.dto';
 import { UserAuth } from 'src/shares/decorators/http.decorators';
 import { UserID } from 'src/shares/decorators/get-user-id.decorator';
+import { ChangeMemberDto, ChangeStatus } from './dto/update-note.dto';
 
 @ApiTags('Note - Ghi chú')
 @Controller('note')
@@ -60,14 +60,13 @@ export class NoteController {
     await this.noteService.changeMember(body);
   }
 
-  // @Put('status/:id')
-  // @ApiOperation({ summary: 'update status by id' })
-  // @ApiBearerAuth()
-  // async updateStatus(
-  //   @Param() param: IdDto,
-  //   @Body() status: ChangeStatus,
-  //   @UserID() userId: string,
-  // ): Promise<void> {
-  //   await this.orderService.changeStatusById(param.id, status);
-  // }
+  @Post('/change-status')
+  @ApiBearerAuth()
+  @UserAuth()
+  @ApiOperation({
+    summary: '[Note] Change status note',
+  })
+  async changeStatusById(@Body() body: ChangeStatus): Promise<void> {
+    await this.noteService.changeStatusById(body);
+  }
 }

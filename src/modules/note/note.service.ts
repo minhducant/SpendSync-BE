@@ -1,17 +1,23 @@
-import { Model } from 'mongoose';
-import { InjectModel } from '@nestjs/mongoose';
+import mongoose, { Model } from 'mongoose';
 import { Injectable, BadRequestException } from '@nestjs/common';
+import { InjectModel, InjectConnection } from '@nestjs/mongoose';
+
 
 import { GetNoteDto } from './dto/get-note.dto';
 import { httpErrors } from 'src/shares/exceptions';
 import { CreateNoteDto } from './dto/create-note.dto';
 import { Note, NoteDocument } from './schemas/note.schema';
 import { ResPagingDto } from 'src/shares/dtos/pagination.dto';
+import { User, UserDocument } from '../user/schemas/user.schema';
 import { ChangeMemberDto, ChangeStatus } from './dto/update-note.dto';
 
 @Injectable()
 export class NoteService {
-  constructor(@InjectModel(Note.name) private noteModel: Model<NoteDocument>) {}
+  constructor(
+    @InjectModel(Note.name) private noteModel: Model<NoteDocument>,
+    @InjectModel(User.name) private userModel: Model<UserDocument>,
+    @InjectConnection() private readonly connection: mongoose.Connection,
+  ) {}
 
   async find(
     getNoteDto: GetNoteDto,
@@ -20,6 +26,7 @@ export class NoteService {
     const { sort, page, limit, title } = getNoteDto;
     const query: any = {};
     query.$or = [{ user_id: user_id }, { 'members._id': user_id }];
+    query.status !== 7;
     if (title) {
       query.title = { $regex: title, $options: 'i' };
     }
@@ -49,8 +56,8 @@ export class NoteService {
     });
   }
 
-  async changeMember(body: ChangeMemberDto): Promise<void> {
-    const { _id, members } = body;
+  async changeMember(dto: ChangeMemberDto): Promise<void> {
+    const { _id, members } = dto;
     const order = await this.noteModel.findById(_id);
     if (!order) {
       throw new BadRequestException(httpErrors.NOTE_NOT_FOUND);
@@ -62,14 +69,15 @@ export class NoteService {
     );
   }
 
-  async changeStatusById(_id: string, dto: ChangeStatus): Promise<void> {
+  async changeStatusById(dto: ChangeStatus): Promise<void> {
+    const { _id, status } = dto;
     const order = await this.noteModel.findById(_id);
     if (!order) {
       throw new BadRequestException(httpErrors.NOTE_NOT_FOUND);
     }
     await this.noteModel.findOneAndUpdate(
       { _id },
-      { status: dto.status },
+      { status: status },
       { new: true },
     );
   }
