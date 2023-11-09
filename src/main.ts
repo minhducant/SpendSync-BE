@@ -50,6 +50,7 @@ async function bootstrap(): Promise<void> {
       deepLinking: true,
       docExpansion: 'list',
       displayRequestDuration: true,
+      // defaultModelsExpandDepth: -1
     },
   });
   await app.listen(appPort);

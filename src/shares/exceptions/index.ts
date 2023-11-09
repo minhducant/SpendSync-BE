@@ -161,6 +161,13 @@ export const httpErrors = {
     code: 'ORDER_00004',
   },
 
+
+  //NOTE
+  NOTE_NOT_FOUND: {
+    message: 'Note not found.',
+    code: 'NOTE_00001',
+  },
+
   // FILE
   FILE_NOT_FOUND: {
     message: 'file not found.',

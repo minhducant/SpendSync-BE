@@ -1,11 +1,12 @@
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { Controller, Get, Post, Body, Query, Param } from '@nestjs/common';
+import { Controller, Get, Post, Body, Query, Param, Put } from '@nestjs/common';
 
 import { Note } from './schemas/note.schema';
 import { NoteService } from './note.service';
 import { GetNoteDto } from './dto/get-note.dto';
 import { IdDto } from 'src/shares/dtos/param.dto';
 import { CreateNoteDto } from './dto/create-note.dto';
+import { ChangeMemberDto } from './dto/update-note.dto';
 import { ResPagingDto } from 'src/shares/dtos/pagination.dto';
 import { UserAuth } from 'src/shares/decorators/http.decorators';
 import { UserID } from 'src/shares/decorators/get-user-id.decorator';
@@ -48,4 +49,25 @@ export class NoteController {
   ): Promise<void> {
     await this.noteService.create(body, userId);
   }
+
+  @Post('/change-member')
+  @ApiBearerAuth()
+  @UserAuth()
+  @ApiOperation({
+    summary: '[Note] Change member',
+  })
+  async changeMember(@Body() body: ChangeMemberDto): Promise<void> {
+    await this.noteService.changeMember(body);
+  }
+
+  // @Put('status/:id')
+  // @ApiOperation({ summary: 'update status by id' })
+  // @ApiBearerAuth()
+  // async updateStatus(
+  //   @Param() param: IdDto,
+  //   @Body() status: ChangeStatus,
+  //   @UserID() userId: string,
+  // ): Promise<void> {
+  //   await this.orderService.changeStatusById(param.id, status);
+  // }
 }
