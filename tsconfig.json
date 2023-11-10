@@ -14,5 +14,6 @@
     "skipLibCheck": true,
     "importHelpers": true,
     "resolveJsonModule": true,
+    "types": ["node", "Multer"] 
   }
 }

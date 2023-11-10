@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsOptional, IsString } from 'class-validator';
+import { IsOptional, IsString, IsNumber } from 'class-validator';
 
 import { PaginationDto } from 'src/shares/dtos/pagination.dto';
 
@@ -8,4 +8,9 @@ export class GetNoteDto extends PaginationDto {
   @IsOptional()
   @IsString()
   readonly title?: string;
+
+  @ApiProperty({ required: false, type: Number, example: 0 })
+  @IsOptional()
+  @IsNumber()
+  readonly status?: Number;
 }

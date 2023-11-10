@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
+import { MongooseModule } from '@nestjs/mongoose';
 
 import { NoteService } from './note.service';
-import { MongooseModule } from '@nestjs/mongoose';
 import { NoteController } from './note.controller';
 import { Note, NoteSchema } from './schemas/note.schema';
 import { User, UserSchema } from '../user/schemas/user.schema';

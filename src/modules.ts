@@ -13,6 +13,8 @@ import { redisConfig } from 'src/configs/redis.config';
 import { NoteModule } from './modules/note/note.module';
 import { UserModule } from 'src/modules/user/user.module';
 import { AuthModule } from 'src/modules/auth/auth.module';
+import { UploadModule } from 'src/modules/upload/upload.module';
+import { FriendModule } from 'src/modules/friend/friend.module';
 import { FirebaseModule } from 'src/modules/firebase/firebase.module';
 
 const Modules: any = [
@@ -20,10 +22,12 @@ const Modules: any = [
   ScheduleModule.forRoot(),
   ConfigModule.forRoot({ isGlobal: true }),
   MongooseModule.forRoot(mongodb.uri, mongodb.options),
-  ThrottlerModule.forRoot([{
-    ttl: 60000,
-    limit: 10,
-  }]),
+  ThrottlerModule.forRoot([
+    {
+      ttl: 60000,
+      limit: 10,
+    },
+  ]),
   BullModule.forRoot({
     redis: redisConfig,
   }),
@@ -35,6 +39,8 @@ const Modules: any = [
   //Customer Module
   AuthModule,
   UserModule,
+  FriendModule,
+  UploadModule,
   NoteModule,
   FirebaseModule,
 ];

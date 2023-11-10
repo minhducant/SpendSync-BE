@@ -23,16 +23,17 @@ export class MemberDto {
   readonly name: string;
 
   @ApiProperty({ required: true })
-  // @IsOptional()
+  @IsOptional()
   @IsString()
   readonly image_url: string;
 
   @ApiProperty({ required: true })
+  @IsOptional()
   @IsString()
   readonly permission: number;
 }
 
-class NoteLineDto {
+export class NoteLineDto {
   @ApiProperty({ required: true })
   @IsObject()
   @ValidateNested()

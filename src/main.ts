@@ -40,7 +40,7 @@ async function bootstrap(): Promise<void> {
   const options = new DocumentBuilder()
     .addBearerAuth()
     .setTitle(appName)
-    .setDescription("")
+    .setDescription('')
     .setVersion('0.0.1')
     .build();
   const document = SwaggerModule.createDocument(app, options);
@@ -50,11 +50,13 @@ async function bootstrap(): Promise<void> {
       deepLinking: true,
       docExpansion: 'list',
       displayRequestDuration: true,
-      // defaultModelsExpandDepth: -1
+      defaultModelsExpandDepth: -1,
     },
   });
   await app.listen(appPort);
   const logger = app.get(Logger);
-  logger.log(`Application is running on: ${await app.getUrl()}/${prefix}/docs/#/`);
+  logger.log(
+    `Application is running on: ${await app.getUrl()}/${prefix}/docs/#/`,
+  );
 }
 bootstrap();
