@@ -1,5 +1,13 @@
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { Controller, Get, Post, Body, Query, Param, Patch } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Query,
+  Param,
+  Patch,
+} from '@nestjs/common';
 
 import {
   ChangeStatus,
@@ -12,7 +20,6 @@ import { GetNoteDto } from './dto/get-note.dto';
 import { IdDto } from 'src/shares/dtos/param.dto';
 import { CreateNoteDto } from './dto/create-note.dto';
 import { ResPagingDto } from 'src/shares/dtos/pagination.dto';
-import { UserAuth } from 'src/shares/decorators/http.decorators';
 import { UserID } from 'src/shares/decorators/get-user-id.decorator';
 
 @ApiTags('Note - Ghi chú')
@@ -21,7 +28,6 @@ export class NoteController {
   constructor(private noteService: NoteService) {}
 
   @ApiBearerAuth()
-  @UserAuth()
   @Get()
   @ApiOperation({ summary: '[Note] Get notes', description: 'Display notes' })
   async find(
@@ -33,7 +39,6 @@ export class NoteController {
 
   @Get(':id')
   @ApiBearerAuth()
-  @UserAuth()
   @ApiOperation({
     summary: '[Note] Get note by id',
   })
@@ -43,7 +48,6 @@ export class NoteController {
 
   @Post('/create')
   @ApiBearerAuth()
-  @UserAuth()
   @ApiOperation({
     summary: '[Note] Create note',
   })
@@ -57,16 +61,12 @@ export class NoteController {
   @Post('/update')
   @ApiOperation({ summary: '[Note] Update note' })
   @ApiBearerAuth()
-  @UserAuth()
-  async updateNote(
-    @Body() updateNoteDto: UpdateNoteDto,
-  ): Promise<void> {
+  async updateNote(@Body() updateNoteDto: UpdateNoteDto): Promise<void> {
     await this.noteService.updateNote(updateNoteDto);
   }
 
   @Post('/change-member')
   @ApiBearerAuth()
-  @UserAuth()
   @ApiOperation({
     summary: '[Note] Change member',
   })
@@ -76,7 +76,6 @@ export class NoteController {
 
   @Post('/change-status')
   @ApiBearerAuth()
-  @UserAuth()
   @ApiOperation({
     summary: '[Note] Change status note',
   })

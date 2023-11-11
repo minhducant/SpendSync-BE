@@ -6,6 +6,20 @@ import { UserStatus } from 'src/shares/enums/user.enum';
 
 export const USER_MODEL = 'user';
 
+@Schema({ _id: false })
+export class Friend {
+  @Prop({ required: true, type: MongooseSchema.Types.ObjectId, index: true })
+  _id: string;
+
+  @Prop({ required: true, type: String })
+  name: string;
+
+  @Prop({ required: true, type: String })
+  image_url: string;
+}
+
+export const FriendSchema = SchemaFactory.createForClass(Friend);
+
 @Schema({ timestamps: true, collection: USER_MODEL })
 export class User {
   @Prop({ type: String })
@@ -18,8 +32,8 @@ export class User {
   @Exclude()
   password: string;
 
-  @Prop({ type: [String] })
-  address: string[];
+  @Prop({ required: false, type: [{ type: FriendSchema }] })
+  friends: Friend[];
 
   @Prop({ type: String })
   full_name: string;
