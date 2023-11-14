@@ -102,4 +102,55 @@ export class NoteService {
       { new: true },
     );
   }
+
+  async splitExpenses(
+    noteId: string,
+  ): Promise<{ payer: string; payee: string; amount: number }[]> {
+    const note = await this.noteModel.findById(noteId);
+    if (!note) {
+      throw new BadRequestException(httpErrors.NOTE_NOT_FOUND);
+    }
+    const payments: {
+      payer: string;
+      payerId: string;
+      payee: string;
+      payeeId: string;
+      amount: number;
+    }[] = [];
+    note.note_line.forEach((line) => {
+      const { buyer, sharers, cost } = line;
+      const payerShare = cost / sharers.length;
+      sharers.forEach((payee) => {
+        if (buyer._id.toString() !== payee._id.toString()) {
+          const existingPayment = payments.find(
+            (payment) =>
+              payment.payerId === buyer._id.toString() &&
+              payment.payeeId === payee._id.toString(),
+          );
+          if (existingPayment) {
+            existingPayment.amount += payerShare;
+          } else {
+            payments.push({
+              payer: buyer.name,
+              payerId: buyer._id.toString(),
+              payee: payee.name,
+              payeeId: payee._id.toString(),
+              amount: payerShare,
+            });
+          }
+        }
+      });
+    });
+    payments.forEach((payment) => {
+      const reversePayment = payments.find(
+        (p) => p.payerId === payment.payeeId && p.payeeId === payment.payerId,
+      );
+      if (reversePayment) {
+        const minAmount = Math.min(payment.amount, reversePayment.amount);
+        payment.amount -= minAmount;
+        reversePayment.amount -= minAmount;
+      }
+    });
+    return payments.filter((payment) => payment.amount > 0);
+  }
 }

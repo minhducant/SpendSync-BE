@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body } from '@nestjs/common';
+import { Controller, Get, Post, Body, Delete } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 
 import { FriendService } from './friend.service';
@@ -11,9 +11,7 @@ import { UserID } from 'src/shares/decorators/get-user-id.decorator';
 @ApiTags('Friend - Bạn bè')
 @Controller('friend')
 export class FriendController {
-  constructor(
-    private friendService: FriendService,
-  ) {}
+  constructor(private friendService: FriendService) {}
 
   @Get()
   @ApiBearerAuth()
@@ -38,7 +36,7 @@ export class FriendController {
     await this.friendService.addFriend(body, userId);
   }
 
-  @Post('/delete')
+  @Delete('/delete')
   @ApiBearerAuth()
   @UserAuth()
   @ApiOperation({

@@ -9,7 +9,7 @@ export class GetNoteDto extends PaginationDto {
   @IsString()
   readonly title?: string;
 
-  @ApiProperty({ required: false, type: Number, example: 0 })
+  @ApiProperty({ required: false, type: Number})
   @IsOptional()
   @IsNumber()
   readonly status?: Number;

@@ -41,7 +41,7 @@ const Modules: any = [
   UserModule,
   FriendModule,
   UploadModule,
-  NoteModule,
   FirebaseModule,
+  NoteModule,
 ];
 export default Modules;

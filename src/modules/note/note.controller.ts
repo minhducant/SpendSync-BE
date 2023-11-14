@@ -1,12 +1,13 @@
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import {
-  Controller,
   Get,
+  Put,
   Post,
   Body,
   Query,
   Param,
   Patch,
+  Controller,
 } from '@nestjs/common';
 
 import {
@@ -58,14 +59,23 @@ export class NoteController {
     await this.noteService.createNote(body, userId);
   }
 
-  @Post('/update')
+  @Patch('/update')
   @ApiOperation({ summary: '[Note] Update note' })
   @ApiBearerAuth()
   async updateNote(@Body() updateNoteDto: UpdateNoteDto): Promise<void> {
     await this.noteService.updateNote(updateNoteDto);
   }
 
-  @Post('/change-member')
+  @Get('split/:id')
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary: '[Note] Split expenses',
+  })
+  async splitExpenses(@Param() { id }: IdDto) {
+    return this.noteService.splitExpenses(id);
+  }
+
+  @Put('/change-member')
   @ApiBearerAuth()
   @ApiOperation({
     summary: '[Note] Change member',
@@ -74,7 +84,7 @@ export class NoteController {
     await this.noteService.changeMember(body);
   }
 
-  @Post('/change-status')
+  @Put('/change-status')
   @ApiBearerAuth()
   @ApiOperation({
     summary: '[Note] Change status note',
