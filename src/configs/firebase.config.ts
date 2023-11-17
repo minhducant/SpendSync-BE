@@ -11,14 +11,3 @@ export const serviceAccount = {
   client_x509_cert_url: process.env.FIREBASE_CLIENT_X509_CERT_URL,
   universe_domain: process.env.FIREBASE_UNIVERSE_DOMAIN,
 };
-
-
-// export const firebaseConfig = {
-//   apiKey: "AIzaSyDv27G-zJymwQfW8MNEvhrcx7ZDVP-6Pok",
-//   authDomain: "chiti-by-antstudio-27b2c.firebaseapp.com",
-//   projectId: "chiti-by-antstudio-27b2c",
-//   storageBucket: "chiti-by-antstudio-27b2c.appspot.com",
-//   messagingSenderId: "920551811930",
-//   appId: "1:920551811930:web:ce722a71379a1e8beee163",
-//   measurementId: "G-Y1FDXGM4FY"
-// };

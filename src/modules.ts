@@ -13,6 +13,7 @@ import { redisConfig } from 'src/configs/redis.config';
 import { NoteModule } from './modules/note/note.module';
 import { UserModule } from 'src/modules/user/user.module';
 import { AuthModule } from 'src/modules/auth/auth.module';
+import { InviteModule } from 'src/modules/invite/invite.module';
 import { UploadModule } from 'src/modules/upload/upload.module';
 import { FriendModule } from 'src/modules/friend/friend.module';
 import { FirebaseModule } from 'src/modules/firebase/firebase.module';
@@ -42,6 +43,7 @@ const Modules: any = [
   FriendModule,
   UploadModule,
   FirebaseModule,
+  InviteModule,
   NoteModule,
 ];
 export default Modules;

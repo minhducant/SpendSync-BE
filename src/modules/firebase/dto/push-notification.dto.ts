@@ -1,7 +1,16 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString, IsNotEmpty } from 'class-validator';
+import { Type } from 'class-transformer';
 
-export class PushNotificationDto {
+import {
+  IsString,
+  IsNotEmpty,
+  IsOptional,
+  IsArray,
+  ArrayMinSize,
+  ValidateNested,
+} from 'class-validator';
+
+export class ISendFirebaseMessages {
   @ApiProperty({
     required: true,
     type: String,
@@ -14,8 +23,8 @@ export class PushNotificationDto {
     required: true,
     type: String,
   })
+  @IsOptional()
   @IsString()
-  @IsNotEmpty()
   title: string;
 
   @ApiProperty({
@@ -24,5 +33,15 @@ export class PushNotificationDto {
   })
   @IsString()
   @IsNotEmpty()
-  body: string;
+  message: string;
+}
+
+export class NotificationDto {
+  @ApiProperty({ required: false, type: ISendFirebaseMessages, isArray: true })
+  @IsOptional()
+  @IsArray()
+  @ArrayMinSize(1)
+  @ValidateNested({ each: true })
+  @Type(() => Object)
+  readonly members: ISendFirebaseMessages[];
 }

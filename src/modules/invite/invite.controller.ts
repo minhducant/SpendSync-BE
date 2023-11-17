@@ -1,24 +1,39 @@
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { Controller, Get, Post, Body, Query, Param } from '@nestjs/common';
+import {
+  Controller,
+  Req,
+  Post,
+  Body,
+  Query,
+  Param,
+  UseGuards,
+} from '@nestjs/common';
 
 import { InviteService } from './invite.service';
+import { IdDto } from 'src/shares/dtos/param.dto';
 import { UserAuth } from 'src/shares/decorators/http.decorators';
 import { UserID } from 'src/shares/decorators/get-user-id.decorator';
 
 @ApiTags('Invite - Chia sẻ')
-@Controller('invite')
+@Controller()
 export class InviteController {
   constructor(private inviteService: InviteService) {}
 
-  @Post()
+  @Post('/add_member/:id')
   @ApiBearerAuth()
-  @UserAuth()
   @ApiOperation({
-    summary: '[Note] Create note',
+    summary: '[Invite] Invite member',
   })
-  async create(
-    @UserID() userId: string,
-  ): Promise<void> {
-    await userId;
+  async inviteNote(@Param() { id }: IdDto, @UserID() userId: string) {
+    return this.inviteService.addNoteMember(id, userId);
+  }
+
+  @Post('/add_friend/:id')
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary: '[Invite] Invite add friend',
+  })
+  async addFriend(@Param() { id }: IdDto, @UserID() userId: string) {
+    return this.inviteService.addFriend(id, userId);
   }
 }

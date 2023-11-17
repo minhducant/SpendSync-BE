@@ -6,11 +6,11 @@ import { UploadService } from './upload.service';
 import { ResUploadDto } from './dto/res-upload.dto';
 
 @ApiTags('Upload - Xử lý ảnh')
-@Controller('upload-image')
+@Controller('upload')
 export class UploadController {
   constructor(private uploadService: UploadService) {}
 
-  @Post()
+  @Post('/image')
   @ApiOperation({ summary: '[Upload] Upload image' })
   @ApiBearerAuth()
   @ApiConsumes('multipart/form-data')

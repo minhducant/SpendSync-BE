@@ -1,17 +1,29 @@
-import { Controller, Post, Body } from '@nestjs/common';
-import { FirebaseService } from './firebase.service';
-import { PushNotificationDto } from './dto/push-notification.dto';
-import { ApiTags } from '@nestjs/swagger';
+import { Controller, Get, Post, Body, Delete } from '@nestjs/common';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 
-@ApiTags('Firebase')
+import { FirebaseService } from './firebase.service';
+import { ISendFirebaseMessages } from './dto/push-notification.dto';
+
+@ApiTags('Firebase - Thông báo')
 @Controller('firebase')
 export class FirebaseController {
   constructor(private readonly firebaseService: FirebaseService) {}
 
-  @Post()
-  async sendPushNotification(@Body() pushNotificationDto: PushNotificationDto) {
-    const { token, title, body } = pushNotificationDto;
-    await this.firebaseService.sendPushNotification(token, title, body);
-    return { message: 'Push notification sent successfully' };
+  @Post('send-message')
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary: '[Firebase] Push notification',
+  })
+  async sendFirebaseMessages(
+    @Body() firebaseMessages: ISendFirebaseMessages,
+  ) {
+    try {
+      const result = await this.firebaseService.sendFirebaseMessage(
+        firebaseMessages,
+      );
+      return { success: true, result };
+    } catch (error) {
+      return { success: false, error: error.message };
+    }
   }
 }
