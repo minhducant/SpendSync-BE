@@ -30,6 +30,13 @@ export class UserService {
     return userId;
   }
 
+  async addFirebaseTokenPush(notification_token: string, _id: string) {
+    await this.userModel.findOneAndUpdate(
+      { _id },
+      { notification_token: notification_token },
+    );
+  }
+
   async findOne(condition: GetUserDto, selectPassword = false): Promise<User> {
     if (selectPassword) {
       return this.userModel.findOne(condition).select('+password');

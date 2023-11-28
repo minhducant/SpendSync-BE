@@ -1,4 +1,5 @@
 import mongoose, { Model } from 'mongoose';
+import { EventEmitter2 } from "@nestjs/event-emitter";
 import { Injectable, BadRequestException } from '@nestjs/common';
 import { InjectModel, InjectConnection } from '@nestjs/mongoose';
 
@@ -17,6 +18,7 @@ import { User, UserDocument } from '../user/schemas/user.schema';
 @Injectable()
 export class NoteService {
   constructor(
+    private readonly eventEmitter: EventEmitter2,
     @InjectModel(Note.name) private noteModel: Model<NoteDocument>,
     @InjectModel(User.name) private userModel: Model<UserDocument>,
     @InjectConnection() private readonly connection: mongoose.Connection,

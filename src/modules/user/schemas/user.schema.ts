@@ -28,13 +28,6 @@ export class User {
   @Prop({ type: String })
   user_id: string;
 
-  @Prop({ type: String, sparse: true })
-  code: string;
-
-  @Prop({ type: String, select: false })
-  @Exclude()
-  password: string;
-
   @Prop({ required: false, type: [{ type: FriendSchema }] })
   friends: Friend[];
 
@@ -53,9 +46,6 @@ export class User {
   @Prop({ type: Number })
   gender: number;
 
-  @Prop({ required: false, type: String })
-  token_app: string;
-
   @Prop({ type: Boolean, default: false })
   is_banned: boolean;
 
@@ -73,6 +63,9 @@ export class User {
 
   @Prop({ required: false, type: String })
   image_url: string;
+
+  @Prop({ required: false, type: String })
+  notification_token: string;
 }
 
 export type UserDocument = User & Document;

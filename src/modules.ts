@@ -6,6 +6,7 @@ import { ScheduleModule } from '@nestjs/schedule';
 import { CacheModule } from '@nestjs/cache-manager';
 import { ThrottlerModule } from '@nestjs/throttler';
 import * as redisStore from 'cache-manager-redis-store';
+import { EventEmitterModule } from '@nestjs/event-emitter';
 
 import { mongodb } from 'src/configs/database.config';
 import { redisConfig } from 'src/configs/redis.config';
@@ -16,7 +17,7 @@ import { AuthModule } from 'src/modules/auth/auth.module';
 import { InviteModule } from 'src/modules/invite/invite.module';
 import { UploadModule } from 'src/modules/upload/upload.module';
 import { FriendModule } from 'src/modules/friend/friend.module';
-import { FirebaseModule } from 'src/modules/firebase/firebase.module';
+import { NotificationModule } from 'src/modules/notification/notification.module';
 
 const Modules: any = [
   ConsoleModule,
@@ -37,12 +38,15 @@ const Modules: any = [
     ...redisConfig,
     isGlobal: true,
   }),
+  EventEmitterModule.forRoot({
+    global: true
+  }),
   //Customer Module
   AuthModule,
   UserModule,
   FriendModule,
   UploadModule,
-  FirebaseModule,
+  NotificationModule,
   InviteModule,
   NoteModule,
 ];
