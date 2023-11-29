@@ -1,26 +1,27 @@
-import { Document } from 'mongoose';
+import { Document, Schema as MongooseSchema } from 'mongoose';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 
-import { NotificationToken } from './notification-token.schema';
+import { USER_MODEL } from 'src/modules/user/schemas/user.schema';
 
-@Schema({ collection: 'notifications' })
+export const NOTIFICATION_MODEL = 'notification';
+@Schema({ timestamps: true, collection: NOTIFICATION_MODEL })
 export class Notification extends Document {
-  @Prop()
-  title: string;
+  @Prop({ type: MongooseSchema.Types.ObjectId, ref: USER_MODEL })
+  user_id: string;
 
-  @Prop({ type: String, default: null })
-  body: string | null;
+  @Prop({ type: String, default: null, required: true })
+  token_id: string;
 
-  @Prop()
-  created_by: string;
+  @Prop({ type: [Object], default: [], required: true })
+  notifications: [Object];
 
-  @Prop({ default: 'ACTIVE' })
-  status: string;
+  @Prop({ type: Object, default: {}, required: true })
+  data: Object;
 
-  @Prop({ type: NotificationToken, ref: 'NotificationToken' })
-  notification_token: NotificationToken;
+  @Prop({ type: Date})
+  createdAt: Date;
 
-  @Prop({ type: Boolean, default: false })
+  @Prop({ type: Boolean })
   is_read: Boolean;
 }
 

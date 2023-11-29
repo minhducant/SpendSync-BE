@@ -46,8 +46,8 @@ const Modules: any = [
   UserModule,
   FriendModule,
   UploadModule,
-  NotificationModule,
   InviteModule,
   NoteModule,
+  NotificationModule,
 ];
 export default Modules;
