@@ -47,6 +47,13 @@ export class NoteController {
     return this.noteService.findById(id);
   }
 
+  @Patch('/sync')
+  @ApiOperation({ summary: '[Note] Update note' })
+  @ApiBearerAuth()
+  async updateNote(@Body() updateNoteDto: UpdateNoteDto): Promise<void> {
+    await this.noteService.updateNote(updateNoteDto);
+  }
+
   @Post('/create')
   @ApiBearerAuth()
   @ApiOperation({
@@ -57,13 +64,6 @@ export class NoteController {
     @UserID() userId: string,
   ): Promise<void> {
     await this.noteService.createNote(body, userId);
-  }
-
-  @Patch('/update')
-  @ApiOperation({ summary: '[Note] Update note' })
-  @ApiBearerAuth()
-  async updateNote(@Body() updateNoteDto: UpdateNoteDto): Promise<void> {
-    await this.noteService.updateNote(updateNoteDto);
   }
 
   @Get('split/:id')

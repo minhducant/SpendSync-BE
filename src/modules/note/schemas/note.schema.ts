@@ -1,3 +1,4 @@
+import { v4 as uuidv4 } from 'uuid';
 import { Document, Schema as MongooseSchema } from 'mongoose';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 
@@ -35,6 +36,14 @@ export const memberSchema = SchemaFactory.createForClass(Member);
 
 @Schema({ _id: false })
 export class NoteLine {
+  @Prop({
+    required: false,
+    index: true,
+    default: uuidv4(),
+    type: MongooseSchema.Types.ObjectId,
+  })
+  _id: string;
+
   @Prop({
     required: true,
     type: Object,

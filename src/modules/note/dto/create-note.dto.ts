@@ -108,7 +108,6 @@ export class CreateNoteDto {
   @ApiProperty({ required: false, type: NoteLineDto, isArray: true })
   @IsOptional()
   @IsArray()
-  // @ArrayMinSize(1)
   @ValidateNested({ each: true })
   @Type(() => Object)
   readonly note_line: NoteLineDto[];
