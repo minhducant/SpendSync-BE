@@ -14,17 +14,17 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Get()
-  @ApiBearerAuth()
+  // @ApiBearerAuth()
   @ApiOperation({ summary: '[User] Get all user' })
   async findAll(@Query() query: GetUsersDto): Promise<ResPagingDto<User[]>> {
     return this.userService.findAll(query);
   }
 
   @Get(':id')
-  @ApiBearerAuth()
-  @UserAuth()
+  // @ApiBearerAuth()
+  // @UserAuth()
   @ApiOperation({
-    summary: '[Note] Get user by id',
+    summary: '[User] Get user by id',
   })
   async findOne(@Param() { id }: IdDto): Promise<User> {
     return this.userService.findById(id);
