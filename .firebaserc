@@ -1,5 +1,8 @@
 {
   "projects": {
-    "default": "chiti-antstudio"
-  }
+    "e.g. staging": "da8a5850",
+    "default": "da8a5850"
+  },
+  "targets": {},
+  "etags": {}
 }
