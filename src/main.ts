@@ -47,8 +47,10 @@ async function bootstrap(): Promise<void> {
   SwaggerModule.setup(`${prefix}/docs`, app, document, {
     customSiteTitle: appName,
     swaggerOptions: {
+      filter: true,
       deepLinking: true,
       docExpansion: 'list',
+      persistAuthorization: true,
       displayRequestDuration: true,
       defaultModelsExpandDepth: -1,
     },

@@ -61,6 +61,7 @@
     "crypto": "1.0.1",
     "dotenv": "^16.3.1",
     "exceljs": "^4.4.0",
+    "express-basic-auth": "^1.2.1",
     "firebase-admin": "^11.11.0",
     "firebase-functions": "^4.5.0",
     "helmet": "4.6.0",

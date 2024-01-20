@@ -75,7 +75,7 @@ export class NoteController {
     return this.noteService.splitExpenses(id);
   }
 
-  @Put('/change-member')
+  @Put('/change_member')
   @ApiBearerAuth()
   @ApiOperation({
     summary: '[Note] Change member',
@@ -84,7 +84,7 @@ export class NoteController {
     await this.noteService.changeMember(body);
   }
 
-  @Put('/change-status')
+  @Put('/change_status')
   @ApiBearerAuth()
   @ApiOperation({
     summary: '[Note] Change status note',

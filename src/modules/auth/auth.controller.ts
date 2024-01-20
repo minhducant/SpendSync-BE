@@ -16,7 +16,6 @@ import { GetCurrentUser } from 'src/shares/decorators/get-current-user.decorator
 
 @Controller('auth')
 @ApiTags('Auth - Xác thực')
-@ApiBearerAuth()
 export class AuthController {
   constructor(
     private readonly authService: AuthService,
@@ -25,12 +24,21 @@ export class AuthController {
 
   @Get('user/current')
   @UserAuth()
+  @ApiBearerAuth()
   @ApiOperation({ summary: '[Auth] Get User Information' })
   async currentUser(@UserID() userId: string): Promise<User> {
     return this.userService.findById(userId);
   }
 
-  @Post('user/google/login')
+  @Post('user/login_apple')
+  @ApiOperation({ summary: '[Auth] Login with Apple' })
+  async logInApple(
+    @Body() loginInstagramDto: LoginGoogleDto,
+  ): Promise<ResponseLogin> {
+    return this.authService.logInGoogle(loginInstagramDto);
+  }
+
+  @Post('user/login_google')
   @ApiOperation({ summary: '[Auth] Login with Google' })
   async logInGoogle(
     @Body() loginInstagramDto: LoginGoogleDto,
@@ -38,7 +46,7 @@ export class AuthController {
     return this.authService.logInGoogle(loginInstagramDto);
   }
 
-  @Post('user/facebook/login')
+  @Post('user/login_facebook')
   @ApiOperation({ summary: '[Auth] Login with Facebook' })
   async loginFacebook(
     @Body() loginFacebookDto: LoginFacebookDto,
@@ -46,7 +54,7 @@ export class AuthController {
     return this.authService.loginFacebook(loginFacebookDto);
   }
 
-  @Post('user/refresh-access-token')
+  @Post('user/refresh_access_token')
   @ApiOperation({ summary: '[Auth] Get new Access Token' })
   @UseGuards(UserRtGuards)
   async userRefreshAccessToken(
