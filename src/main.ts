@@ -3,9 +3,10 @@ dotenv.config();
 import * as config from 'config';
 import * as helmet from 'helmet';
 import * as Sentry from '@sentry/node';
-import { Logger } from '@nestjs/common';
+import * as compression from 'compression';
 import { NestFactory } from '@nestjs/core';
 import { IoAdapter } from '@nestjs/platform-socket.io';
+import { Logger, VersioningType } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { NestExpressApplication } from '@nestjs/platform-express';
 
@@ -28,20 +29,24 @@ async function bootstrap(): Promise<void> {
     dsn: dnsSentry,
     environment: appEnv,
   });
-  app.enableCors();
   app.use(helmet());
+  app.use(compression());
   app.setGlobalPrefix(prefix);
+  app.enableCors({ origin: '*' });
   app.useWebSocketAdapter(new IoAdapter(app));
   app.useGlobalPipes(new BodyValidationPipe());
   app.useGlobalFilters(new HttpExceptionFilter());
+  app.enableVersioning({ type: VersioningType.URI });
   app.useGlobalInterceptors(new SentryInterceptor());
   app.useGlobalInterceptors(new ResponseTransformInterceptor());
   const appName = config.get<string>('app.name');
   const options = new DocumentBuilder()
     .addBearerAuth()
     .setTitle(appName)
-    .setDescription('')
     .setVersion('0.0.1')
+    .setDescription(`${appName} API description`)
+    .addExtension('x-custom-extension', { key: 'value' })
+    .setExternalDoc('Postman Collection', `/${prefix}/docs-json`)
     .build();
   const document = SwaggerModule.createDocument(app, options);
   SwaggerModule.setup(`${prefix}/docs`, app, document, {

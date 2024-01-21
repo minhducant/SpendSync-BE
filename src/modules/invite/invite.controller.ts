@@ -14,6 +14,7 @@ import { IdDto } from 'src/shares/dtos/param.dto';
 import { UserAuth } from 'src/shares/decorators/http.decorators';
 import { UserID } from 'src/shares/decorators/get-user-id.decorator';
 
+@Controller('invite')
 @ApiTags('Invite - Chia sẻ')
 @Controller()
 export class InviteController {
