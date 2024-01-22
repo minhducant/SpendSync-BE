@@ -41,7 +41,7 @@ export class NoteController {
   @Get(':id')
   @ApiBearerAuth()
   @ApiOperation({
-    summary: '[Note] Get note by id',
+    summary: '[Note] Get note',
   })
   async findOne(@Param() { id }: IdDto): Promise<Note> {
     return this.noteService.findById(id);
