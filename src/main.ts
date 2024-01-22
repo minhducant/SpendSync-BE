@@ -1,20 +1,22 @@
 import * as dotenv from 'dotenv';
+dotenv.config();
 import * as config from 'config';
+import * as helmet from 'helmet';
 import * as Sentry from '@sentry/node';
+import * as compression from 'compression';
 import { NestFactory } from '@nestjs/core';
-import { ValidationPipe } from '@nestjs/common';
+import { IoAdapter } from '@nestjs/platform-socket.io';
+import { Logger, VersioningType } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { NestExpressApplication } from '@nestjs/platform-express';
 
-import { AppModules } from './app.module';
+import { AppModules } from 'src/app.module';
 import { BodyValidationPipe } from 'src/shares/pipes/body.validation.pipe';
-import { SentryInterceptor } from 'src/shares/interceptors/sentry.interceptor';
 import { HttpExceptionFilter } from 'src/shares/filters/http-exception.filter';
+import { SentryInterceptor } from 'src/shares/interceptors/sentry.interceptor';
 import { ResponseTransformInterceptor } from 'src/shares/interceptors/response.interceptor';
 
-dotenv.config();
-const appPort = 3343;
-// const appPort = config.get<number>('app.port');
+const appPort = config.get<number>('app.port');
 const prefix = config.get<string>('app.prefix');
 const appEnv = config.get<string>('app.node_env');
 const dnsSentry = config.get<string>('sentry_dns');
@@ -27,33 +29,40 @@ async function bootstrap(): Promise<void> {
     dsn: dnsSentry,
     environment: appEnv,
   });
+  app.use(helmet());
+  app.use(compression());
   app.setGlobalPrefix(prefix);
-  app.enableCors();
+  app.enableCors({ origin: '*' });
+  app.useWebSocketAdapter(new IoAdapter(app));
   app.useGlobalPipes(new BodyValidationPipe());
   app.useGlobalFilters(new HttpExceptionFilter());
+  app.enableVersioning({ type: VersioningType.URI });
   app.useGlobalInterceptors(new SentryInterceptor());
   app.useGlobalInterceptors(new ResponseTransformInterceptor());
-  app.useGlobalPipes(
-    new ValidationPipe({
-      whitelist: true,
-    }),
-  );
   const appName = config.get<string>('app.name');
   const options = new DocumentBuilder()
     .addBearerAuth()
     .setTitle(appName)
-    .setDescription(appName)
-    .setVersion(prefix)
+    .setVersion('0.0.1')
+    .setDescription(`${appName} API description`)
+    .setExternalDoc('Postman Collection', `/${prefix}/docs-json`)
     .build();
   const document = SwaggerModule.createDocument(app, options);
   SwaggerModule.setup(`${prefix}/docs`, app, document, {
     customSiteTitle: appName,
     swaggerOptions: {
-      docExpansion: 'list',
       filter: true,
+      deepLinking: true,
+      docExpansion: 'list',
+      persistAuthorization: true,
       displayRequestDuration: true,
+      defaultModelsExpandDepth: -1,
     },
   });
   await app.listen(appPort);
+  const logger = app.get(Logger);
+  logger.log(
+    `Application is running on: ${await app.getUrl()}/${prefix}/docs/#/`,
+  );
 }
 bootstrap();

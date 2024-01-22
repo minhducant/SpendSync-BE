@@ -1,16 +1,16 @@
 import { SetMetadata, UseGuards, applyDecorators } from '@nestjs/common';
 
-import { ClientRole } from '../enums/client.enum';
+import { UserRole } from '../enums/user.enum';
 
 export const Roles = (roles: number[]): MethodDecorator & ClassDecorator => {
   const setMetaData = SetMetadata('roles', roles);
   return setMetaData;
 };
 
-export const ClientAuth = (
-  clientRole?: ClientRole[],
+export const UserAuth = (
+  UserRole?: UserRole[],
 ): MethodDecorator & ClassDecorator => {
-  return applyDecorators(Roles(clientRole));
+  return applyDecorators(Roles(UserRole));
 };
 
 export const ClientUserAuthPermission = (): MethodDecorator &

@@ -4,6 +4,7 @@ app:
   port: APP_PORT
   prefix: APP_PREFIX
   url: APP_URL
+  version: VERSION
   jwt_access_token_secret: JWT_ACCESS_TOKEN_SECRET
   jwt_access_token_expiration_time: JWT_ACCESS_TOKEN_EXPIRATION_TIME
   jwt_refresh_token_secret: JWT_REFRESH_TOKEN_SECRET
