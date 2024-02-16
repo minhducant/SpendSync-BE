@@ -76,7 +76,7 @@ export class AuthService {
   async generateUserAccessToken(user: User): Promise<string> {
     return this.jwtService.signAsync(
       {
-        userId: user['_id'],
+        userId: user,
         date: Date.now(),
       },
       {
@@ -89,7 +89,7 @@ export class AuthService {
   async generateUserRefreshToken(user: User): Promise<string> {
     const refreshToken = await this.jwtService.signAsync(
       {
-        userId: user['_id'],
+        userId: user,
         date: Date.now(),
       },
       {
@@ -97,11 +97,11 @@ export class AuthService {
         expiresIn: JWT_CONSTANTS.userAccessTokenExpiry,
       },
     );
-    await this.cacheManager.set(
-      `${USER_AUTH_CACHE_PREFIX}${user['_id']}`,
-      refreshToken,
-      JWT_CONSTANTS.userAccessTokenExpiry,
-    );
+    // await this.cacheManager.set(
+    //   `${USER_AUTH_CACHE_PREFIX}${user['_id']}`,
+    //   refreshToken,
+    //   JWT_CONSTANTS.userAccessTokenExpiry,
+    // );
     return refreshToken;
   }
 

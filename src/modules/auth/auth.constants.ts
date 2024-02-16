@@ -24,14 +24,19 @@ export const JWT_CONSTANTS = {
     config.get<string>('app.user_jwt_refresh_token_expiration_time'),
   ),
 };
+
 export const SIGN_UP_EXPIRY = parseInt(
   config.get<string>('sign_up_expiration_time'),
 );
+
 export const FORGOT_PASSWORD_EXPIRY = parseInt(
   config.get<string>('forgot_password_expiration_time'),
 );
 
 export const SIGN_UP_CACHE = 'SIGN_CACHE_';
+
 export const FORGOT_PASSWORD_CACHE = 'FORGOT_PASSWORD_CACHE_';
+
 export const USER_AUTH_CACHE_PREFIX = 'USER_AUTH_CACHE_PREFIX_';
+
 export const CLIENT_AUTH_CACHE_PREFIX = 'CLIENT_AUTH_CACHE_PREFIX_';

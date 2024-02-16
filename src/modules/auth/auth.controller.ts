@@ -62,5 +62,4 @@ export class AuthController {
   ): Promise<ResponseRefreshTokenDto> {
     return this.authService.UserGetAccessToken(user);
   }
-  
 }

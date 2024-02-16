@@ -35,7 +35,7 @@ export class ResponseTransformInterceptor<T>
           ..._data.metadata,
         };
         metadata.apiName = getConfig().get<string>('app.name');
-        metadata.apiVersion = getConfig().get<string>('app.prefix');
+        metadata.apiVersion = getConfig().get<string>('app.version');
         metadata.timestamp = new Date();
 
         if (_data?.data?.length || _data?.length) {
