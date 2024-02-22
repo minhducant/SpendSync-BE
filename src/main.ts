@@ -36,8 +36,8 @@ async function bootstrap(): Promise<void> {
   app.useWebSocketAdapter(new IoAdapter(app));
   app.useGlobalPipes(new BodyValidationPipe());
   app.useGlobalFilters(new HttpExceptionFilter());
-  app.enableVersioning({ type: VersioningType.URI });
   app.useGlobalInterceptors(new SentryInterceptor());
+  app.enableVersioning({ type: VersioningType.URI });
   app.useGlobalInterceptors(new ResponseTransformInterceptor());
   const appName = config.get<string>('app.name');
   const options = new DocumentBuilder()
@@ -59,10 +59,11 @@ async function bootstrap(): Promise<void> {
       defaultModelsExpandDepth: -1,
     },
   });
-  await app.listen(appPort);
-  const logger = app.get(Logger);
-  logger.log(
-    `Application is running on: ${await app.getUrl()}/${prefix}/docs/#/`,
-  );
+  await app.listen(appPort).then(async () => {
+    const logger = app.get(Logger);
+    logger.debug(
+      `Application is running on: ${await app.getUrl()}/${prefix}/docs/#/`,
+    );
+  });
 }
 bootstrap();
