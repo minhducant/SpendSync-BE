@@ -23,6 +23,6 @@ services:
 
   redis:
     image: 'redis:6-alpine'
-    container_name: redis-chiti
+    container_name: redis-spendsync
     ports:
       - 6379:6379

@@ -58,7 +58,7 @@ export class UpdateNoteDto {
 
   @ApiProperty({ required: true })
   @IsString()
-  readonly name: string;
+  readonly title: string;
 
   @ApiProperty({ required: false })
   @IsString()

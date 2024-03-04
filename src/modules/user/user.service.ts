@@ -45,16 +45,16 @@ export class UserService {
   }
 
   async findAll(getUsersDto: GetUsersDto): Promise<ResPagingDto<User[]>> {
-    const { sort, page, limit, id, name, phone } = getUsersDto;
+    const { sort, page, limit, id, name, phone, user_id } = getUsersDto;
     const query: any = {};
     if (id) {
       query._id = id;
     }
     if (name) {
-      query.$or = [
-        { name: { $regex: name, $options: 'i' } },
-        { user_id: { $regex: name, $options: 'i' } },
-      ];
+      query.$or = [{ name: { $regex: name, $options: 'i' } }];
+    }
+    if (user_id) {
+      query.user_id = { $regex: user_id, $options: 'i' };
     }
     if (phone) {
       query.phone = { $regex: phone, $options: 'i' };

@@ -18,6 +18,11 @@ export class GetUsersDto extends PaginationDto {
 
   @ApiProperty({ required: false })
   @IsOptional()
+  @IsString()
+  readonly user_id?: string;
+
+  @ApiProperty({ required: false })
+  @IsOptional()
   @IsEmail()
   readonly email?: string;
 

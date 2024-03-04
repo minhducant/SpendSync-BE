@@ -14,15 +14,19 @@ import {
 
 export class MemberDto {
   @ApiProperty({ required: true, description: 'The member ID' })
+  // @IsMongoId()
+  readonly _id: string;
+  
+  @ApiProperty({ required: false, description: 'The member ID' })
   @IsOptional()
   @IsMongoId()
-  readonly _id: string;
+  readonly user_id: string;
 
-  @ApiProperty({ required: true })
+  @ApiProperty({ required: false })
   @IsString()
   readonly name: string;
 
-  @ApiProperty({ required: true })
+  @ApiProperty({ required: false })
   @IsOptional()
   @IsString()
   readonly image_url: string;
@@ -76,7 +80,7 @@ export class NoteLineDto {
 export class CreateNoteDto {
   @ApiProperty({ required: true })
   @IsString()
-  readonly name: string;
+  readonly title: string;
 
   @ApiProperty({ required: false })
   @IsString()
@@ -88,7 +92,7 @@ export class CreateNoteDto {
   @IsString()
   readonly color: string;
 
-  @ApiProperty({ required: true, type: Number, example: 1 })
+  @ApiProperty({ required: false, type: Number, example: 1 })
   @IsNumber()
   status: Number;
 
@@ -100,8 +104,8 @@ export class CreateNoteDto {
   @ApiProperty({ required: false, type: MemberDto, isArray: true })
   @IsOptional()
   @IsArray()
-  @ArrayMinSize(1)
-  @ValidateNested({ each: true })
+  @ArrayMinSize(0)
+  @ValidateNested({ each: false })
   @Type(() => Object)
   readonly members: MemberDto[];
 

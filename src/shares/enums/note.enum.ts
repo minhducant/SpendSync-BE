@@ -19,26 +19,23 @@ export enum NotePermission {
 }
 
 export enum Currency {
-  /** Việt Nam Đồng */
-  VND = 0,
-  /** Đô la Mỹ */
-  USD = 1,
-  /** Euro */
-  EUR = 2,
-  /** Yên Nhật */
-  JPY = 3,
-  /** Bảng Anh */
-  GBP = 4,
-  /** Đô la Úc */
-  AUD = 5,
-  /** Đô la Canada */
-  CAD = 6,
-  /** Nhân dân tệ Trung Quốc */
-  CNY = 7,
-  /** Rupee Ấn Độ */
-  INR = 8,
-  /** Real Brazil */
-  BRL = 9,
+  VND = 0, // Vietnamese Dong
+  USD = 1, // United States Dollar
+  JPY = 2, // Japanese Yen
+  KRW = 3, // South Korean Won
+  EUR = 4, // Euro
+  GBP = 5, // British Pound
+  TWD = 6, // New Taiwan Dollar
+  THB = 7, // Thai Baht
+  LAK = 8, // Lao Kip
+  KHR = 9, // Cambodian Riel
+  PHP = 10, // Philippine Peso
+  CNY = 11, // Chinese Yuan Renminbi
+  AUD = 12, // Australian Dollar
+  IDR = 13, // Indonesian Rupiah
+  MYR = 14, // Malaysian Ringgit
+  SGD = 15, // Singapore Dollar
+  CAD = 16, // Canadian Dollar
 }
 
 /**

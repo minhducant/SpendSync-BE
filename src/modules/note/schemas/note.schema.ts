@@ -14,17 +14,20 @@ export const NOTE_MODEL = 'note';
 
 @Schema({ _id: false })
 export class Member {
-  @Prop({ required: true, type: MongooseSchema.Types.ObjectId, index: true })
+  @Prop({ required: false, index: true })
   _id: string;
 
   @Prop({ required: true, type: String })
   name: string;
 
-  @Prop({ required: true, type: String })
+  @Prop({ required: false, type: String })
   image_url: string;
 
+  @Prop({ required: false, type: String })
+  user_id: string;
+
   @Prop({
-    required: false,
+    required: true ,
     type: Number,
     enum: NotePermission,
     default: NotePermission.edit,
@@ -96,7 +99,7 @@ export class Note {
   user_id: MongooseSchema.Types.ObjectId;
 
   @Prop({ required: true, type: String })
-  name: string;
+  title: string;
 
   @Prop({ required: false, type: String })
   desc: string;
