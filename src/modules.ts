@@ -12,7 +12,6 @@ import { mongodb } from 'src/configs/database.config';
 import { redisConfig } from 'src/configs/redis.config';
 //Customer Module
 import { NoteModule } from './modules/note/note.module';
-import { I18NModule } from 'src/modules/i18n/i18n.module';
 import { UserModule } from 'src/modules/user/user.module';
 import { AuthModule } from 'src/modules/auth/auth.module';
 import { InviteModule } from 'src/modules/invite/invite.module';
@@ -49,7 +48,6 @@ const Modules: any = [
   UploadModule,
   InviteModule,
   NoteModule,
-  // I18NModule,
   NotificationModule,
 ];
 export default Modules;

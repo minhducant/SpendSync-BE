@@ -83,7 +83,7 @@ export class UserService {
       return this.userModel.findByIdAndUpdate(
         user._id,
         {
-          image_url: profile.picture.data.url,
+          // image_url: profile.picture.data.url,
           lastLoginAt: new Date(),
         },
         { new: true },
@@ -111,8 +111,8 @@ export class UserService {
       return this.userModel.findByIdAndUpdate(
         user._id,
         {
-          image_url: picture,
-          user_id: user_id,
+          // image_url: picture,
+          // user_id: user_id,
           last_login_at: new Date(),
           email,
         },

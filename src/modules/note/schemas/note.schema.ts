@@ -27,7 +27,7 @@ export class Member {
   user_id: string;
 
   @Prop({
-    required: true ,
+    required: true,
     type: Number,
     enum: NotePermission,
     default: NotePermission.edit,
@@ -42,7 +42,8 @@ export class NoteLine {
   @Prop({
     required: false,
     index: true,
-    default: uuidv4(),
+    unique: true,
+    auto: true,
     type: MongooseSchema.Types.ObjectId,
   })
   _id: string;
@@ -63,7 +64,7 @@ export class NoteLine {
   @Prop({ required: true, type: String })
   expense: string;
 
-  @Prop({ required: false, type: Date })
+  @Prop({ required: false, type: Date, default: new Date() })
   payment_date: Date;
 
   @Prop({ required: true, type: Number })
