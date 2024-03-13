@@ -1,5 +1,5 @@
 import mongoose, { Model } from 'mongoose';
-import { EventEmitter2 } from "@nestjs/event-emitter";
+import { EventEmitter2 } from '@nestjs/event-emitter';
 import { Injectable, BadRequestException } from '@nestjs/common';
 import { InjectModel, InjectConnection } from '@nestjs/mongoose';
 
@@ -11,6 +11,7 @@ import {
 import { GetNoteDto } from './dto/get-note.dto';
 import { httpErrors } from 'src/shares/exceptions';
 import { CreateNoteDto } from './dto/create-note.dto';
+import { AddExpenseDto } from './dto/add-expense.dto';
 import { Note, NoteDocument } from './schemas/note.schema';
 import { ResPagingDto } from 'src/shares/dtos/pagination.dto';
 import { User, UserDocument } from '../user/schemas/user.schema';
@@ -30,7 +31,10 @@ export class NoteService {
   ): Promise<ResPagingDto<Note[]>> {
     const { sort, page, limit, title, status } = getNoteDto;
     const query: any = {};
-    query.$or = [{ user_id: user_id }, { 'members._id': user_id }];
+    query.$or = [
+      { user_id: new mongoose.Types.ObjectId(user_id) },
+      { 'members._id': user_id },
+    ];
     if (title) {
       query.title = { $regex: title, $options: 'i' };
     }
@@ -43,14 +47,30 @@ export class NoteService {
     } else {
       query.status = { $nin: [6, 7] };
     }
+
+    const pipeline = [
+      { $match: query },
+      { $sort: { createdAt: sort } },
+      { $skip: (page - 1) * limit },
+      { $limit: limit },
+      {
+        $addFields: {
+          total_money: {
+            $reduce: {
+              input: '$note_line',
+              initialValue: 0,
+              in: { $add: ['$$value', '$$this.cost'] },
+            },
+          },
+        },
+      },
+    ];
+
     const [result, total] = await Promise.all([
-      this.noteModel
-        .find(query)
-        .skip((page - 1) * limit)
-        .limit(limit)
-        .sort({ createdAt: sort }),
-      this.noteModel.find(query).countDocuments(),
+      this.noteModel.aggregate(pipeline).exec(),
+      this.noteModel.countDocuments(query),
     ]);
+
     return {
       result,
       total,
@@ -59,7 +79,22 @@ export class NoteService {
   }
 
   async findById(id: string): Promise<Note> {
-    return this.noteModel.findOne({ _id: id });
+    const pipeline = [
+      { $match: { _id: new mongoose.Types.ObjectId(id) } },
+      {
+        $addFields: {
+          total_money: {
+            $reduce: {
+              input: '$note_line',
+              initialValue: 0,
+              in: { $add: ['$$value', '$$this.cost'] },
+            },
+          },
+        },
+      },
+    ];
+    const noteWithTotalMoney = await this.noteModel.aggregate(pipeline).exec();
+    return noteWithTotalMoney[0];
   }
 
   async createNote(payload: CreateNoteDto, create_by: string): Promise<void> {
@@ -154,5 +189,22 @@ export class NoteService {
       }
     });
     return payments.filter((payment) => payment.amount > 0);
+  }
+
+  async addExpense(dto: AddExpenseDto): Promise<void> {
+    const noteAggregate = await this.noteModel.aggregate([
+      { $match: { _id: new mongoose.Types.ObjectId(dto._id) } },
+      {
+        $addFields: {
+          note_line: { $concatArrays: ['$note_line', [dto.expense]] },
+        },
+      },
+    ]);
+    if (noteAggregate.length === 0) {
+      throw new BadRequestException(httpErrors.NOTE_NOT_FOUND);
+    }
+    await this.noteModel.findByIdAndUpdate(dto._id, {
+      note_line: noteAggregate[0].note_line,
+    });
   }
 }

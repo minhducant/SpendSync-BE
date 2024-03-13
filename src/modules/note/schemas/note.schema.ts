@@ -67,11 +67,11 @@ export class NoteLine {
   @Prop({ required: false, type: Date, default: new Date() })
   payment_date: Date;
 
+  @Prop({ required: false, type: Boolean, default: true })
+  split_evenly: Boolean;
+
   @Prop({ required: true, type: Number })
   cost: number;
-
-  @Prop({ required: false, type: String })
-  color: string;
 
   @Prop({
     required: false,

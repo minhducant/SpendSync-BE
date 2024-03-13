@@ -19,6 +19,7 @@ import { Note } from './schemas/note.schema';
 import { NoteService } from './note.service';
 import { GetNoteDto } from './dto/get-note.dto';
 import { IdDto } from 'src/shares/dtos/param.dto';
+import { AddExpenseDto } from './dto/add-expense.dto';
 import { CreateNoteDto } from './dto/create-note.dto';
 import { ResPagingDto } from 'src/shares/dtos/pagination.dto';
 import { UserID } from 'src/shares/decorators/get-user-id.decorator';
@@ -73,6 +74,15 @@ export class NoteController {
   })
   async splitExpenses(@Param() { id }: IdDto) {
     return this.noteService.splitExpenses(id);
+  }
+
+  @Put('/add_expense')
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary: '[Note] Add Expense',
+  })
+  async addExpense(@Body() body: AddExpenseDto): Promise<void> {
+    await this.noteService.addExpense(body);
   }
 
   @Put('/change_member')

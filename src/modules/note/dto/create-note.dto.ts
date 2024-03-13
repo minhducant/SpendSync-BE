@@ -6,6 +6,7 @@ import {
   IsArray,
   IsNumber,
   IsObject,
+  IsBoolean,
   IsMongoId,
   IsOptional,
   ArrayMinSize,
@@ -13,10 +14,36 @@ import {
 } from 'class-validator';
 
 export class MemberDto {
-  @ApiProperty({ required: true, description: 'The member ID' })
+  @ApiProperty({ required: true })
   // @IsMongoId()
   readonly _id: string;
-  
+
+  @ApiProperty({ required: false })
+  @IsOptional()
+  @IsMongoId()
+  readonly user_id: string;
+
+  @ApiProperty({ required: false })
+  @IsString()
+  readonly name: string;
+
+  @ApiProperty({ required: false })
+  @IsOptional()
+  @IsString()
+  readonly image_url: string;
+
+  @ApiProperty({ required: true })
+  @IsOptional()
+  @IsString()
+  readonly permission: number;
+}
+
+export class sharersDto {
+  @ApiProperty({ required: false })
+  @IsOptional()
+  @IsMongoId()
+  readonly _id: string;
+
   @ApiProperty({ required: false, description: 'The member ID' })
   @IsOptional()
   @IsMongoId()
@@ -30,6 +57,11 @@ export class MemberDto {
   @IsOptional()
   @IsString()
   readonly image_url: string;
+
+  @ApiProperty({ required: false })
+  @IsOptional()
+  @IsNumber()
+  readonly money: Number;
 
   @ApiProperty({ required: true })
   @IsOptional()
@@ -53,28 +85,36 @@ export class NoteLineDto {
   @IsNumber()
   readonly cost: number;
 
-  @ApiProperty({ required: false, example: '#FFFFFF' })
-  @IsOptional()
-  @IsString()
-  readonly color: string;
-
   @ApiProperty({ required: false, type: Number, example: 0 })
   @IsOptional()
   @IsNumber()
-  topic?: Number
+  topic?: Number;
 
-  @ApiProperty({ required: false, type: MemberDto, isArray: true })
+  @ApiProperty({ required: false, type: Boolean, example: true })
+  @IsOptional()
+  @IsBoolean()
+  split_evenly?: Boolean;
+
+  @ApiProperty({ required: false, type: sharersDto, isArray: true })
   @IsOptional()
   @IsArray()
   @ArrayMinSize(1)
   @ValidateNested({ each: true })
   @Type(() => Object)
-  readonly sharers: MemberDto[];
+  readonly sharers: sharersDto[];
 
   @ApiProperty({ required: false })
   @IsOptional()
   @IsDate()
   readonly payment_date: Date;
+
+  @ApiProperty({ required: false, isArray: true })
+  @IsOptional()
+  @IsArray()
+  @ArrayMinSize(0)
+  @ValidateNested({ each: true })
+  @Type(() => Object)
+  readonly image_bill: string[];
 }
 
 export class CreateNoteDto {
@@ -99,7 +139,7 @@ export class CreateNoteDto {
   @ApiProperty({ required: false, type: Number, example: 0 })
   @IsOptional()
   @IsNumber()
-  currency: Number
+  currency: Number;
 
   @ApiProperty({ required: false, type: MemberDto, isArray: true })
   @IsOptional()
@@ -112,6 +152,7 @@ export class CreateNoteDto {
   @ApiProperty({ required: false, type: NoteLineDto, isArray: true })
   @IsOptional()
   @IsArray()
+  @ArrayMinSize(0)
   @ValidateNested({ each: true })
   @Type(() => Object)
   readonly note_line: NoteLineDto[];
