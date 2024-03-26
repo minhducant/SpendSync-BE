@@ -48,7 +48,7 @@ export class NoteController {
     return this.noteService.findById(id);
   }
 
-  @Patch('/sync')
+  @Put('/sync')
   @ApiOperation({ summary: '[Note] Update note' })
   @ApiBearerAuth()
   async updateNote(@Body() updateNoteDto: UpdateNoteDto): Promise<void> {
@@ -76,7 +76,7 @@ export class NoteController {
     return this.noteService.splitExpenses(id);
   }
 
-  @Put('/add_expense')
+  @Patch('/add_expense')
   @ApiBearerAuth()
   @ApiOperation({
     summary: '[Note] Add Expense',
@@ -85,7 +85,16 @@ export class NoteController {
     await this.noteService.addExpense(body);
   }
 
-  @Put('/change_member')
+  @Patch('/edit_expense')
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary: '[Note] Edit Expense',
+  })
+  async editExpense(@Body() body: AddExpenseDto): Promise<void> {
+    await this.noteService.editExpense(body);
+  }
+
+  @Patch('/change_member')
   @ApiBearerAuth()
   @ApiOperation({
     summary: '[Note] Change member',
@@ -94,7 +103,7 @@ export class NoteController {
     await this.noteService.changeMember(body);
   }
 
-  @Put('/change_status')
+  @Patch('/change_status')
   @ApiBearerAuth()
   @ApiOperation({
     summary: '[Note] Change status note',

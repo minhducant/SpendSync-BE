@@ -207,4 +207,21 @@ export class NoteService {
       note_line: noteAggregate[0].note_line,
     });
   }
+
+  async editExpense(dto: AddExpenseDto): Promise<void> {
+    const noteAggregate = await this.noteModel.aggregate([
+      { $match: { _id: new mongoose.Types.ObjectId(dto._id) } },
+      {
+        $addFields: {
+          note_line: { $concatArrays: ['$note_line', [dto.expense]] },
+        },
+      },
+    ]);
+    if (noteAggregate.length === 0) {
+      throw new BadRequestException(httpErrors.NOTE_NOT_FOUND);
+    }
+    await this.noteModel.findByIdAndUpdate(dto._id, {
+      note_line: noteAggregate[0].note_line,
+    });
+  }
 }

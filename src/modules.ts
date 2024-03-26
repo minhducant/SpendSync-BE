@@ -14,6 +14,7 @@ import { redisConfig } from 'src/configs/redis.config';
 import { NoteModule } from './modules/note/note.module';
 import { UserModule } from 'src/modules/user/user.module';
 import { AuthModule } from 'src/modules/auth/auth.module';
+import { DebtModule } from 'src/modules/debt/debt.module';
 import { InviteModule } from 'src/modules/invite/invite.module';
 import { UploadModule } from 'src/modules/upload/upload.module';
 import { FriendModule } from 'src/modules/friend/friend.module';
@@ -48,6 +49,7 @@ const Modules: any = [
   UploadModule,
   InviteModule,
   NoteModule,
+  DebtModule,
   NotificationModule,
 ];
 export default Modules;

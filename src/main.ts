@@ -5,6 +5,7 @@ import * as helmet from 'helmet';
 import * as Sentry from '@sentry/node';
 import * as compression from 'compression';
 import { NestFactory } from '@nestjs/core';
+import { urlencoded, json } from 'express';
 import { IoAdapter } from '@nestjs/platform-socket.io';
 import { Logger, VersioningType } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
@@ -33,11 +34,13 @@ async function bootstrap(): Promise<void> {
   app.use(compression());
   app.setGlobalPrefix(prefix);
   app.enableCors({ origin: '*' });
+  app.use(json({ limit: '50mb' }));
   app.useWebSocketAdapter(new IoAdapter(app));
   app.useGlobalPipes(new BodyValidationPipe());
   app.useGlobalFilters(new HttpExceptionFilter());
   app.useGlobalInterceptors(new SentryInterceptor());
   app.enableVersioning({ type: VersioningType.URI });
+  app.use(urlencoded({ extended: true, limit: '50mb' }));
   app.useGlobalInterceptors(new ResponseTransformInterceptor());
   const appName = config.get<string>('app.name');
   const options = new DocumentBuilder()

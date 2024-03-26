@@ -1,7 +1,10 @@
-import { Controller, Get, Post, Body } from '@nestjs/common';
+import { Controller, Get, Post, Body, Query } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 
+import { Notification } from './schemas/notification.schema';
 import { NotificationService } from './notification.service';
+import { ResPagingDto } from 'src/shares/dtos/pagination.dto';
+import { GetNotificationDto } from './dto/get-notifications.dto';
 import { UserID } from 'src/shares/decorators/get-user-id.decorator';
 import { RegisterNotificationDto } from './dto/register-notification.dto';
 
@@ -13,8 +16,11 @@ export class NotificationController {
   @Get()
   @ApiBearerAuth()
   @ApiOperation({ summary: '[ Notification ] Get notifications' })
-  async getNotifications(@UserID() user_id: string): Promise<void> {
-    return this.notificationService.getNotifications(user_id);
+  async getNotifications(
+    @UserID() user_id: string,
+    @Query() query: GetNotificationDto,
+  ): Promise<ResPagingDto<Notification[]>> {
+    return this.notificationService.getNotifications(query, user_id);
   }
 
   @Post('/push')
@@ -29,19 +35,6 @@ export class NotificationController {
       RegisterNotificationDto,
     );
   }
-
-  // @Post('/seen')
-  // @ApiBearerAuth()
-  // @ApiOperation({ summary: '[ Notification ] Seen notification' })
-  // async updateNotification(
-  //   @UserID() user_id: string,
-  //   @Body() RegisterNotificationDto: RegisterNotificationDto,
-  // ): Promise<void> {
-  //   return this.notificationService.updateNotification(
-  //     user_id,
-  //     RegisterNotificationDto,
-  //   );
-  // }
 
   @Post('/register')
   @ApiBearerAuth()

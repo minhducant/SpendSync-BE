@@ -10,21 +10,21 @@ export class Notification extends Document {
   user_id: string;
 
   @Prop({ type: String, default: null, required: true })
-  token_id: string;
+  notification_token: string;
 
-  @Prop({ type: [Object], default: [], required: true })
-  notifications: [Object];
+  // @Prop({ type: Object, default: {}, required: false })
+  // data: Object;
 
-  @Prop({ type: Object, default: {}, required: true })
-  data: Object;
+  @Prop({ type: String, default: '', required: true })
+  title: string;
 
-  @Prop({ type: Date})
-  createdAt: Date;
+  @Prop({ type: String, default: '', required: false, nullable: true })
+  body: string;
 
   @Prop({ type: Boolean })
   is_read: Boolean;
 }
 
-export type NoteDocument = Notification & Document;
+export type NotificationDocument = Notification & Document;
 
 export const NotificationSchema = SchemaFactory.createForClass(Notification);

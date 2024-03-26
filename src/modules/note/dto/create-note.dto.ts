@@ -108,13 +108,17 @@ export class NoteLineDto {
   @IsDate()
   readonly payment_date: Date;
 
-  @ApiProperty({ required: false, isArray: true })
-  @IsOptional()
-  @IsArray()
-  @ArrayMinSize(0)
-  @ValidateNested({ each: true })
-  @Type(() => Object)
-  readonly image_bill: string[];
+  // @ApiProperty({ required: false, isArray: true })
+  // @IsOptional()
+  // @IsArray()
+  // @ArrayMinSize(0)
+  // @ValidateNested({ each: true })
+  // @Type(() => Object)
+  // readonly image_bill: string[];
+
+  @ApiProperty({ required: false })
+  @IsString()
+  readonly image_bill: string;
 }
 
 export class CreateNoteDto {

@@ -83,8 +83,8 @@ export class NoteLine {
   @Prop({ required: false, type: [{ type: memberSchema }] })
   sharers: Member[];
 
-  @Prop({ required: false, type: [{ type: String }] })
-  image_bill?: string[];
+  @Prop({ required: false, type: String })
+  image_bill?: string;
 }
 
 export const noteLineSchema = SchemaFactory.createForClass(NoteLine);
