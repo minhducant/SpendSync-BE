@@ -9,11 +9,11 @@ export class Notification extends Document {
   @Prop({ type: MongooseSchema.Types.ObjectId, ref: USER_MODEL })
   user_id: string;
 
-  @Prop({ type: String, default: null, required: true })
-  notification_token: string;
+  @Prop({ type: [String], default: [], required: false })
+  notification_token: string[];
 
-  // @Prop({ type: Object, default: {}, required: false })
-  // data: Object;
+  @Prop({ type: Map, of: String, default: {}, required: false })
+  data: Record<string, string>;
 
   @Prop({ type: String, default: '', required: true })
   title: string;

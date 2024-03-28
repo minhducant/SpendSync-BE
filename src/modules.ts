@@ -18,6 +18,7 @@ import { DebtModule } from 'src/modules/debt/debt.module';
 import { InviteModule } from 'src/modules/invite/invite.module';
 import { UploadModule } from 'src/modules/upload/upload.module';
 import { FriendModule } from 'src/modules/friend/friend.module';
+import { PaymentModule } from 'src/modules/payment/payment.module';
 import { NotificationModule } from 'src/modules/notification/notification.module';
 
 const Modules: any = [
@@ -50,6 +51,7 @@ const Modules: any = [
   InviteModule,
   NoteModule,
   DebtModule,
+  PaymentModule,
   NotificationModule,
 ];
 export default Modules;
