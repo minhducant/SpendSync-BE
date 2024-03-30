@@ -26,6 +26,7 @@ import {
   providers: [NotificationService],
   controllers: [NotificationController],
 })
+
 export class NotificationModule {
   constructor() {
     const { serviceAccount } = require('../../configs/firebase.config');

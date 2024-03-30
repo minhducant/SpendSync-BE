@@ -4,6 +4,7 @@ import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 
 import {
   QueryMomoDto,
+  PaymentMomoDto,
   RefundMomoDto,
   ConfirmMomoDto,
   CreateGatewayMomoDto,
@@ -33,9 +34,9 @@ export class PaymentController {
   @ApiOperation({ summary: '[Payment] Momo create gateway' })
   async createGatewayMomo(
     @UserID() user_id: string,
-    @Body() CreateGatewayMomoDto: CreateGatewayMomoDto,
-  ): Promise<void> {
-    return this.paymentService.createGatewayMomo(CreateGatewayMomoDto, user_id);
+    // @Body() PaymentMomoDto: PaymentMomoDto,
+  ): Promise<any> {
+    return this.paymentService.createGatewayMomo();
   }
 
   @Post('/momo/query')

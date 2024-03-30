@@ -258,6 +258,7 @@ export class CreateGatewayMomoDto extends Document {
 
   @ApiProperty({
     description: 'Ngôn ngữ của message được trả về, có thể là "vi" hoặc "en"',
+    default: 'vi',
   })
   @Prop()
   @IsOptional()
@@ -296,6 +297,7 @@ export class RefundMomoDto {
 
   @ApiProperty({
     description: 'Ngôn ngữ của message được trả về, có thể là "vi" hoặc "en"',
+    default: 'vi',
   })
   @IsString()
   @IsIn(['vi', 'en'])
@@ -342,6 +344,7 @@ export class ConfirmMomoDto {
 
   @ApiProperty({
     description: 'Ngôn ngữ của message được trả về, có thể là "vi" hoặc "en"',
+    default: 'vi',
   })
   @IsString()
   @IsIn(['vi', 'en'])
@@ -378,10 +381,96 @@ export class QueryMomoDto {
 
   @ApiProperty({
     description: 'Ngôn ngữ của message được trả về, có thể là "vi" hoặc "en"',
+    default: 'vi',
   })
   @IsString()
   @IsIn(['vi', 'en'])
   lang: string;
+
+  @ApiProperty({ description: 'Chữ ký để xác nhận giao dịch' })
+  @IsNotEmpty()
+  @IsString()
+  signature: string;
+}
+
+export class PaymentMomoDto {
+  @ApiProperty({ description: 'Mã đối tác, thông tin tích hợp' })
+  @IsNotEmpty()
+  @IsString()
+  partnerCode: string;
+
+  @ApiProperty({ description: 'Tên đối tác' })
+  @IsNotEmpty()
+  @IsString()
+  partnerName: string;
+
+  @ApiProperty({ description: 'Mã cửa hàng' })
+  @IsNotEmpty()
+  @IsString()
+  storeId: string;
+
+  @ApiProperty({ description: 'Loại yêu cầu, ở đây là "captureWallet"' })
+  @IsNotEmpty()
+  @IsString()
+  requestType: string;
+
+  @ApiProperty({
+    description:
+      'API của đối tác, được MoMo sử dụng để gửi kết quả thanh toán theo phương thức IPN (server-to-server)',
+  })
+  @IsNotEmpty()
+  @IsString()
+  ipnUrl: string;
+
+  @ApiProperty({
+    description:
+      'URL chuyển hướng từ MoMo về trang mua hàng của đối tác sau khi thanh toán',
+  })
+  @IsNotEmpty()
+  @IsString()
+  redirectUrl: string;
+
+  @ApiProperty({ description: 'Mã đơn hàng của đối tác' })
+  @IsNotEmpty()
+  @IsString()
+  orderId: string;
+
+  @ApiProperty({ description: 'Số tiền cần thanh toán' })
+  @IsNotEmpty()
+  @IsNumber()
+  amount: number;
+
+  @ApiProperty({
+    description: 'Ngôn ngữ của message được trả về, có thể là "vi" hoặc "en"',
+    default: 'vi',
+  })
+  @IsString()
+  @IsIn(['vi', 'en'])
+  lang: string;
+
+  @ApiProperty({
+    description: 'Xác định liệu giao dịch sẽ tự động capture hay không',
+  })
+  @IsNotEmpty()
+  @IsBoolean()
+  autoCapture: boolean;
+
+  @ApiProperty({ description: 'Thông tin đơn hàng' })
+  @IsNotEmpty()
+  @IsString()
+  orderInfo: string;
+
+  @ApiProperty({ description: 'Định danh duy nhất cho mỗi yêu cầu' })
+  @IsNotEmpty()
+  @IsString()
+  requestId: string;
+
+  @ApiProperty({
+    description: 'Dữ liệu bổ sung, được mã hóa base64 theo định dạng JSON',
+  })
+  @IsNotEmpty()
+  @IsString()
+  extraData: string;
 
   @ApiProperty({ description: 'Chữ ký để xác nhận giao dịch' })
   @IsNotEmpty()
