@@ -120,6 +120,7 @@ export class Note {
     required: true,
     type: Number,
     enum: Currency,
+    // default: 0,
   })
   currency?: Currency;
 

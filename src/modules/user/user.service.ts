@@ -1,9 +1,10 @@
 import { Model } from 'mongoose';
 import { v4 as uuidv4 } from 'uuid';
-import { Cache } from 'cache-manager';
+// import { Cache } from 'cache-manager';
+// import { caching } from 'cache-manager';
 import { InjectModel } from '@nestjs/mongoose';
 import { Injectable, Inject } from '@nestjs/common';
-import { CACHE_MANAGER } from '@nestjs/cache-manager';
+// import { CACHE_MANAGER } from '@nestjs/cache-manager';
 
 import { GetUserDto } from './dto/get-user.dto';
 import { GetUsersDto } from './dto/get-users.dto';
@@ -17,7 +18,7 @@ import { UserFacebookInfoDto } from '../auth/dto/user-facebook-info.dto';
 export class UserService {
   constructor(
     @InjectModel(User.name) private userModel: Model<UserDocument>,
-    @Inject(CACHE_MANAGER) private cacheManager: Cache,
+    // @Inject(CACHE_MANAGER) private cacheManager: Cache,
   ) {}
 
   async findById(_id: string): Promise<User> {

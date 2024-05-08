@@ -2,6 +2,7 @@ import { DecodedIdToken } from 'firebase-admin/auth';
 import { Controller, Get, Post, Body, Query } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 
+import { IdDto } from 'src/shares/dtos/param.dto';
 import { Notification } from './schemas/notification.schema';
 import { NotificationService } from './notification.service';
 import { ResPagingDto } from 'src/shares/dtos/pagination.dto';
@@ -34,6 +35,15 @@ export class NotificationController {
     return this.notificationService.sendNotification(SendNotificationDto);
   }
 
+  @Post('/read')
+  @ApiBearerAuth()
+  @ApiOperation({ summary: '[Notification] Read notification by ID' })
+  async markNotificationAsRead(
+    @Body() IdDto: IdDto,
+  ): Promise<Notification | null> {
+    return this.notificationService.readById(IdDto.id);
+  }
+
   @Post('/register')
   @ApiBearerAuth()
   @ApiOperation({ summary: '[Notification] Register notification' })
@@ -47,13 +57,10 @@ export class NotificationController {
     );
   }
 
-  // @Post('/verify_token')
-  // @ApiOperation({ summary: '[ Notification ] Verify Firebase Token' })
-  // async verifyToken(
-  //   @Body() registerNotificationDto: RegisterNotificationDto,
-  // ): Promise<DecodedIdToken> {
-  //   return this.notificationService.verifyFirebaseToken(
-  //     registerNotificationDto,
-  //   );
-  // }
+  @Post('/read_all')
+  @ApiBearerAuth()
+  @ApiOperation({ summary: '[Notification] Read all notifications' })
+  async markAllNotificationsAsRead(@UserID() user_id: string): Promise<void> {
+    return this.notificationService.readAll(user_id);
+  }
 }

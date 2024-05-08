@@ -107,4 +107,29 @@ export class NotificationService {
       return error;
     }
   }
+
+  async readById(id: string): Promise<Notification | null> {
+    try {
+      await this.notificationModel.findByIdAndUpdate(
+        id,
+        { $set: { is_read: true } },
+        { new: true },
+      );
+      return;
+    } catch (error) {
+      console.error('Error occurred while updating notification:', error);
+      return null;
+    }
+  }
+
+  async readAll(user_id: string): Promise<void> {
+    try {
+      await this.notificationModel.updateMany(
+        { user_id },
+        { $set: { is_read: true } },
+      );
+    } catch (error) {
+      console.error('Error occurred while updating notifications:', error);
+    }
+  }
 }

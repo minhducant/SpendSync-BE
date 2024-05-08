@@ -11,6 +11,7 @@ const bootstrap = new BootstrapConsole({
     logger: false,
   },
 });
+
 bootstrap.init().then(async (app) => {
   try {
     await app.init();

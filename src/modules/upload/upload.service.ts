@@ -1,49 +1,45 @@
-import { Injectable } from '@nestjs/common';
-import { S3 } from 'aws-sdk';
-import * as config from 'config';
-import { PutObjectRequest } from 'aws-sdk/clients/s3';
+import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
+import { Connection, Types } from 'mongoose';
+import { MongoGridFS } from 'mongo-gridfs';
+import { InjectConnection } from '@nestjs/mongoose';
+import { GridFSBucketReadStream, ObjectId } from 'mongodb';
 
-import { LinodeConfigDto } from './dto/linode.dto';
+import { FileInfoVm } from './dto/file-info-vm.dto';
 import { ResUploadDto } from './dto/res-upload.dto';
 
-const linode_config = config.get<LinodeConfigDto>('linode_config');
+const url = process.env.MONGO_URI;
 
 @Injectable()
 export class UploadService {
-  getLinode(): S3 {
-    return new S3({
-      region: linode_config.region,
-      endpoint: linode_config.domain,
-      credentials: {
-        accessKeyId: linode_config.access_key_id,
-        secretAccessKey: linode_config.secret_access_key,
-      },
-    });
+  private fileModel: MongoGridFS;
+  constructor(@InjectConnection() private readonly connection: Connection) {
+    const db = this.connection.getClient().db();
+    this.fileModel = new MongoGridFS(db, 'fs');
   }
 
-  async uploadLinode(file: Express.Multer.File): Promise<ResUploadDto> {
-    const config = this.getLinode();
-    const s3 = new S3(config);
-    const myFile = file.originalname.split('.');
-    let fileType = myFile[myFile.length - 1];
-    if (fileType == 'svg') {
-      fileType = 'svg+xml';
-    }
-    const fineName = myFile[0];
-    const bucketName = linode_config.bucket_name;
-    const finalName = `${fineName}_${new Date().toISOString()}.${fileType}`;
-    const params: PutObjectRequest = {
-      Bucket: `${bucketName}`,
-      Key: `${finalName}`,
-      Body: file.buffer,
-      ContentDisposition: 'inline',
-      ContentType: `image/${fileType}`,
-      ACL: 'public-read',
-    };
-    const { Location, Key } = await s3.upload(params).promise();
+  async readStream(id: string): Promise<GridFSBucketReadStream> {
+    return await this.fileModel.readFileStream(id);
+  }
+
+  async findInfo(id: string): Promise<FileInfoVm> {
+    // const result = await this.fileModel.findById(id);
+    const result = await this.fileModel
+      .findById(id)
+      .catch((err) => {
+        console.log(err)
+        throw new HttpException('File not found', HttpStatus.NOT_FOUND);
+      })
+      .then((result) => result);
+    console.log(result);
     return {
-      Location,
-      Key,
+      filename: result.filename,
+      length: result.length,
+      chunkSize: result.chunkSize,
+      contentType: result.contentType,
     };
+  }
+
+  async deleteFile(id: string): Promise<boolean> {
+    return await this.fileModel.delete(id);
   }
 }

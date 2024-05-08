@@ -140,7 +140,7 @@ export class CreateNoteDto {
   @IsNumber()
   status: Number;
 
-  @ApiProperty({ required: false, type: Number, example: 0 })
+  @ApiProperty({ required: false, type: Number, example: 1 })
   @IsOptional()
   @IsNumber()
   currency: Number;
